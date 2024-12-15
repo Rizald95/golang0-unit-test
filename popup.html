@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golang Unit Test Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="side-panel">
+    <header class="header">
+      <button class="menu-button">☰</button>
+      <h1>Hi Programmer,</h1>
+      <p>How can I assist you today?</p>
+    </header>
+
+    <div class="promo-banner">
+      <img src="assets/snowman.png" alt="Promo" class="promo-icon" />
+      <span>Enjoy up to 30% OFF →</span>
+    </div>
+
+    <div class="model-selector">
+      <img src="assets/chatgpt-icon.png" alt="ChatGPT" class="model-icon" />
+      <span>GPT-4o mini</span>
+      <span class="dropdown-icon">▼</span>
+    </div>
+
+    <div class="toolbar">
+      <button class="tool-button"><span>✂️</span></button>
+      <button class="tool-button"><span>🔗</span></button>
+      <button class="tool-button"><span>📚</span></button>
+      <div class="toolbar-right">
+        <button class="tool-button"><span>⚡</span></button>
+        <button class="tool-button"><span>⏱️</span></button>
+        <button class="tool-button"><span>✨</span></button>
+      </div>
+    </div>
+
+    <div class="chat-container" id="chat-container"></div>
+
+    <div class="input-container">
+      <input 
+        type="text" 
+        id="input-message" 
+        placeholder="Type a message..." 
+        class="message-input" 
+      />
+      <div class="input-buttons">
+        <button class="format-button">/</button>
+        <button class="format-button">@</button>
+      </div>
+      <button id="send-button" class="send-button">➤</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
+

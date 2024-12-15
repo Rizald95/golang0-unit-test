@@ -1,0 +1,32 @@
+{
+    "manifest_version": 3,
+    "name": "Golang Unit Test Generator",
+    "version": "1.0",
+    "description": "Generate Golang unit tests using LLM (Groq API).",
+    "permissions": [
+      "sidePanel",
+      "storage",
+      "activeTab"
+    ],
+    "side_panel": {
+      "default_path": "popup.html"
+    },
+    "background": {
+      "service_worker": "background.js",
+      "type": "module"
+    },
+    "action": {
+      "default_icon": {
+        "16": "assets/icon16.png",
+        "48": "assets/icon48.png",
+        "128": "assets/icon128.png"
+      }
+    },
+    "icons": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  }
+  
+  
