@@ -15,14 +15,20 @@
     </header>
 
     <div class="promo-banner">
-      <img src="assets/snowman.png" alt="Promo" class="promo-icon" />
-      <span>Enjoy up to 30% OFF →</span>
+      <img src="assets/chrome.png" alt="Promo" class="promo-icon" />
+      <span>Golang Unit Test Generator Beta version</span>
     </div>
 
     <div class="model-selector">
-      <img src="assets/chatgpt-icon.png" alt="ChatGPT" class="model-icon" />
-      <span>GPT-4o mini</span>
+      <img src="assets/gpt.png" alt="ChatGPT" class="model-icon" id="model-icon" />
+      <span id="selected-model">GPT-4o mini</span>
       <span class="dropdown-icon">▼</span>
+      <div class="model-dropdown">
+        <div class="model-option" data-model="gemma-7b-it" data-icon="assets/google.png">gemma-7b-it</div>
+        <div class="model-option" data-model="gemma2-9b-it" data-icon="assets/search.png">gemma2-9b-it</div>
+        <div class="model-option" data-model="llama-3.1-70b-versatile" data-icon="assets/meta.png">llama-3.1-70b-versatile</div>
+        <div class="model-option" data-model="mixtral-8x7b-32768" data-icon="assets/mistral-valve.png">mixtral-8x7b-32768</div>
+      </div>
     </div>
 
     <div class="toolbar">
@@ -36,15 +42,15 @@
       </div>
     </div>
 
-    <div class="chat-container" id="chat-container"></div>
+    <div class="chat-container" id="chatbox"></div>
 
     <div class="input-container">
-      <input 
-        type="text" 
+      <textarea 
         id="input-message" 
         placeholder="Type a message..." 
         class="message-input" 
-      />
+        rows="2"
+      ></textarea>
       <div class="input-buttons">
         <button class="format-button">/</button>
         <button class="format-button">@</button>
