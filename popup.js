@@ -117,11 +117,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const textContainer = document.createElement("div");
     textContainer.classList.add("message-text");
+	
     textContainer.textContent = message;
     messageElement.appendChild(textContainer);
 
+    // Check if the message contains a code snippet
+    const codeRegex = /```(\w+)?\n([\s\S]*?)```/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = codeRegex.exec(message)) !== null) {
+      // Add text before the code snippet
+      if (match.index > lastIndex) {
+        const textNode = document.createTextNode(message.slice(lastIndex, match.index));
+        textContainer.appendChild(textNode);
+      }
+
+      // Create and add the code display element
+      const language = match[1] || 'plaintext';
+      const code = match[2].trim();
+      const codeDisplay = createCodeDisplay("Generated Code", "Here's the code snippet:", code, language);
+      textContainer.appendChild(codeDisplay);
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add any remaining text after the last code snippet
+    if (lastIndex < message.length) {
+      const textNode = document.createTextNode(message.slice(lastIndex));
+      textContainer.appendChild(textNode);
+    }
+
+    messageElement.appendChild(textContainer);
     chatbox.appendChild(messageElement);
     chatbox.scrollTop = chatbox.scrollHeight;
+	
+  }
+  
+  
+  function createCodeDisplay(title, description, code, language) {
+    const codeDisplayElement = document.createElement('div');
+    codeDisplayElement.className = 'code-display bg-gray-800 rounded-lg overflow-hidden shadow-lg mb-6';
+
+    const headerElement = document.createElement('div');
+    headerElement.className = 'p-4 bg-gray-700';
+    headerElement.innerHTML = `
+      <h3 class="text-xl font-semibold text-white mb-2">${title}</h3>
+      <p class="text-gray-300">${description}</p>
+    `;
+
+    const codeElement = document.createElement('div');
+    codeElement.className = 'relative';
+    codeElement.innerHTML = `
+      <pre class="language-${language}"><code>${escapeHtml(code)}</code></pre>
+      <button class="copy-button absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded text-xs">
+        Copy
+      </button>
+    `;
+
+    codeDisplayElement.appendChild(headerElement);
+    codeDisplayElement.appendChild(codeElement);
+
+    // Add copy functionality
+    const copyButton = codeElement.querySelector('.copy-button');
+    copyButton.addEventListener('click', () => {
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = 'Copied!';
+        setTimeout(() => {
+          copyButton.textContent = 'Copy';
+        }, 2000);
+      });
+    });
+
+    return codeDisplayElement;
+  }
+
+  function escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 });
 
