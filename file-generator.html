@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="file-generator.css" />
+</head>
+<body>
+  <div class="side-panel">
+    <header class="header">
+      <button id="back-button" class="menu-button">←</button>
+      <h1>File Generator</h1>
+    </header>
+
+    <div class="file-generator-container">
+      <textarea 
+        id="code-input" 
+        placeholder="Paste your code here..." 
+        class="code-input" 
+        rows="10"
+      ></textarea>
+      <div class="button-container">
+        <button id="save-button" class="primary-button">Save File</button>
+      </div>
+    </div>
+
+    <div id="notification" class="notification hidden">
+      File saved successfully!
+    </div>
+  </div>
+  <script type="module" src="file-generator.js"></script>
+</body>
+</html>

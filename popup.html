@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Golang Unit Test Generator</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-go.min.js"></script>
 </head>
 <body>
   <div class="side-panel">
@@ -40,7 +37,7 @@
       <button class="tool-button"><span>📚</span></button>
       <div class="toolbar-right">
         <button class="tool-button"><span>⚡</span></button>
-        <button class="tool-button"><span>⏱️</span></button>
+        <button class="timer"><span>⏱️</span></button>
         <button class="tool-button"><span>✨</span></button>
       </div>
     </div>
@@ -55,13 +52,15 @@
         rows="2"
       ></textarea>
       <div class="input-buttons">
-        <button class="format-button">/</button>
-        <button class="format-button">@</button>
+        <button class="format-button" id="file-upload-button">/</button>
+        <input type="file" id="file-upload" style="display: none;" accept=".go,.js,.py,.java,.cpp,.cs,.rb,.php,.swift,.kt,.ts,.rs,.scala,.hs,.lua,.pl,.sh,.sql,.html,.css,.json,.xml,.yaml,.md,.txt">
+        <button class="format-button-2">@</button>
       </div>
       <button id="send-button" class="send-button">➤</button>
     </div>
   </div>
-  <script src="popup.js"></script>
+ <script type="module" src="fileHandler.js"></script>
+  <script type="module" src="popup.js"></script>
 </body>
 </html>
 

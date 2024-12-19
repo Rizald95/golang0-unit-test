@@ -1,3 +1,5 @@
+import { initializeFileUpload, detectLanguage } from './fileHandler.js'; 
+
 const apiKey = "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"; // API Key Groq
 const apiURL = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -12,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentModel = "mixtral-8x7b-32768"; // Default model
   let currentModelIcon = "assets/mistral-valve.png"; // Default model icon
+   let uploadedFileName = null;
+   
+    initializeFileUpload(userInput, appendMessage);
 
   userInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && event.shiftKey) {
@@ -41,6 +46,18 @@ document.addEventListener("DOMContentLoaded", () => {
       appendMessage(`Model changed to ${selectedModel}`, "system");
     });
   });
+  
+   document.querySelector('.format-button-2').addEventListener('click', () => {
+    window.location.href = 'file-generator.html';
+  });
+  
+  document.addEventListener("DOMContentLoaded", () => {
+  const timerButton = document.querySelector(".timer");
+
+  timerButton.addEventListener("click", () => {
+    chrome.tabs.create({ url: "timer.html" });
+  });
+});
 
   document.addEventListener("click", (e) => {
     if (!modelSelector.contains(e.target)) {
@@ -60,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     userInput.value = "";
 
     try {
+		const language = uploadedFileName ? detectLanguage(uploadedFileName) : 'plaintext';
       const response = await fetch(apiURL, {
         method: "POST",
         headers: {
@@ -118,8 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const textContainer = document.createElement("div");
     textContainer.classList.add("message-text");
 	
-    textContainer.textContent = message;
-    messageElement.appendChild(textContainer);
+   // textContainer.textContent = message;
+  //  messageElement.appendChild(textContainer);
 
     // Check if the message contains a code snippet
     const codeRegex = /```(\w+)?\n([\s\S]*?)```/g;

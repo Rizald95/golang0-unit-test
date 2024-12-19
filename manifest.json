@@ -6,7 +6,8 @@
     "permissions": [
       "sidePanel",
       "storage",
-      "activeTab"
+      "activeTab",
+	  "downloads"
     ],
     "side_panel": {
       "default_path": "popup.html"
@@ -26,7 +27,13 @@
       "16": "assets/icon16.png",
       "48": "assets/icon48.png",
       "128": "assets/icon128.png"
-    }
+    },
+	"web_accessible_resources": [
+      {
+        "resources": ["file-generator.html", "file-generator.js", "file-generator.css"],
+        "matches": ["<all_urls>"]
+      }
+    ]
   }
   
   
