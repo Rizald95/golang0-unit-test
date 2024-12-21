@@ -1,5 +1,6 @@
 import { initializeFileUpload, detectLanguage } from './fileHandler.js'; 
 
+
 const apiKey = "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"; // API Key Groq
 const apiURL = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -17,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
    let uploadedFileName = null;
    
     initializeFileUpload(userInput, appendMessage);
+	 initializeTheme();
+	
 
   userInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && event.shiftKey) {
@@ -27,6 +30,32 @@ document.addEventListener("DOMContentLoaded", () => {
       sendBtn.click();
     }
   });
+  
+  // Get the theme toggle button
+const themeToggleButton = document.querySelector('.theme-toggle-button');
+
+// Add event listener to toggle between light and dark mode
+themeToggleButton.addEventListener('click', () => {
+  const body = document.body;
+
+  // Toggle between light-mode and dark-mode classes
+  if (body.classList.contains('light-mode')) {
+    body.classList.remove('light-mode');
+    body.classList.add('dark-mode');
+  } else {
+    body.classList.remove('dark-mode');
+    body.classList.add('light-mode');
+  }
+
+  // Save the theme preference to local storage
+  localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark-mode' : 'light-mode');
+});
+
+// Apply saved theme on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme') || 'light-mode';
+  document.body.classList.add(savedTheme);
+});
 
   modelSelector.addEventListener("click", () => {
     modelDropdown.style.display = modelDropdown.style.display === "block" ? "none" : "block";
@@ -172,43 +201,63 @@ document.addEventListener("DOMContentLoaded", () => {
 	
   }
   
-  
-  function createCodeDisplay(title, description, code, language) {
-    const codeDisplayElement = document.createElement('div');
-    codeDisplayElement.className = 'code-display bg-gray-800 rounded-lg overflow-hidden shadow-lg mb-6';
+ function createCodeDisplay(title, description, code, language) {
+  const codeDisplayElement = document.createElement('div');
+  codeDisplayElement.className = 'code-display';
+  codeDisplayElement.style.backgroundColor = '#1e1e1e'; // Warna latar belakang tema gelap
+  codeDisplayElement.style.borderRadius = '8px';
+  codeDisplayElement.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
+  codeDisplayElement.style.marginBottom = '16px';
+  codeDisplayElement.style.overflow = 'hidden';
 
-    const headerElement = document.createElement('div');
-    headerElement.className = 'p-4 bg-gray-700';
-    headerElement.innerHTML = `
-      <h3 class="text-xl font-semibold text-white mb-2">${title}</h3>
-      <p class="text-gray-300">${description}</p>
-    `;
+  const headerElement = document.createElement('div');
+  headerElement.style.padding = '12px';
+  headerElement.style.backgroundColor = '#252526'; // Warna header tema gelap
+  headerElement.innerHTML = `
+    <h3 style="font-size: 16px; font-weight: bold; color: #d4d4d4; margin-bottom: 4px;">${title}</h3>
+    <p style="color: #808080; font-size: 14px;">${description}</p>
+  `;
 
-    const codeElement = document.createElement('div');
-    codeElement.className = 'relative';
-    codeElement.innerHTML = `
-      <pre class="language-${language}"><code>${escapeHtml(code)}</code></pre>
-      <button class="copy-button absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded text-xs">
-        Copy
-      </button>
-    `;
+  const codeElement = document.createElement('div');
+  codeElement.className = 'relative';
+  codeElement.style.position = 'relative';
+  codeElement.style.padding = '16px';
+  codeElement.style.backgroundColor = '#1e1e1e'; // Sama dengan latar luar
+  codeElement.innerHTML = `
+    <pre style="color: #dcdcdc; font-family: 'Consolas', 'Courier New', monospace;"><code class="language-${language}">${escapeHtml(code)}</code></pre>
+    <button class="copy-button" style="
+      position: absolute; 
+      top: 8px; 
+      right: 8px; 
+      background-color: #007acc; 
+      color: white; 
+      font-size: 12px; 
+      font-weight: bold; 
+      padding: 4px 8px; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer;
+    ">
+      Copy
+    </button>
+  `;
 
-    codeDisplayElement.appendChild(headerElement);
-    codeDisplayElement.appendChild(codeElement);
+  codeDisplayElement.appendChild(headerElement);
+  codeDisplayElement.appendChild(codeElement);
 
-    // Add copy functionality
-    const copyButton = codeElement.querySelector('.copy-button');
-    copyButton.addEventListener('click', () => {
-      navigator.clipboard.writeText(code).then(() => {
-        copyButton.textContent = 'Copied!';
-        setTimeout(() => {
-          copyButton.textContent = 'Copy';
-        }, 2000);
-      });
+  // Add copy functionality
+  const copyButton = codeElement.querySelector('.copy-button');
+  copyButton.addEventListener('click', () => {
+    navigator.clipboard.writeText(code).then(() => {
+      copyButton.textContent = 'Copied!';
+      setTimeout(() => {
+        copyButton.textContent = 'Copy';
+      }, 2000);
     });
+  });
 
-    return codeDisplayElement;
-  }
+  return codeDisplayElement;
+}
 
   function escapeHtml(unsafe) {
     return unsafe
@@ -217,6 +266,26 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+  
+   function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light-mode';
+    document.body.classList.add(savedTheme);
+    updateThemeIcon(savedTheme === 'light-mode');
+  }
+
+  function toggleTheme() {
+    const isLightMode = document.body.classList.contains('light-mode');
+    document.body.classList.remove(isLightMode ? 'light-mode' : 'dark-mode');
+    document.body.classList.add(isLightMode ? 'dark-mode' : 'light-mode');
+    localStorage.setItem('theme', isLightMode ? 'dark-mode' : 'light-mode');
+    updateThemeIcon(!isLightMode);
+  }
+
+  function updateThemeIcon(isLightMode) {
+    const themeToggleButton = document.querySelector('.theme-toggle-button span');
+    themeToggleButton.textContent = isLightMode ? '🌙' : '☀️';
+    themeToggleButton.parentElement.title = `Switch to ${isLightMode ? 'Dark' : 'Light'} Mode`;
   }
 });
 

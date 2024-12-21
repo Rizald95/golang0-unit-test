@@ -5,45 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Golang Unit Test Generator</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/prism/prism-tomorrow.min.css" />
+  <script src="assets/prism/prism.min.js"></script>
+  <script src="assets/prism/prism-go.min.js"></script>
 </head>
 <body>
   <div class="side-panel">
+    <!-- Header -->
     <header class="header">
       <button class="menu-button">☰</button>
       <h1>Hi Programmer,</h1>
       <p>How can I assist you today?</p>
     </header>
 
+    <!-- Promo Banner -->
     <div class="promo-banner">
       <img src="assets/chrome.png" alt="Promo" class="promo-icon" />
       <span>Golang Unit Test Generator Beta version</span>
     </div>
 
+    <!-- Model Selector -->
     <div class="model-selector">
       <img src="assets/gpt.png" alt="ChatGPT" class="model-icon" id="model-icon" />
       <span id="selected-model">Choose Model</span>
       <span class="dropdown-icon">▼</span>
       <div class="model-dropdown">
-        <div class="model-option" data-model="gemma-7b-it" data-icon="assets/google.png">gemma-7b-it</div>
         <div class="model-option" data-model="gemma2-9b-it" data-icon="assets/search.png">gemma2-9b-it</div>
         <div class="model-option" data-model="llama-3.1-70b-versatile" data-icon="assets/meta.png">llama-3.1-70b-versatile</div>
         <div class="model-option" data-model="mixtral-8x7b-32768" data-icon="assets/mistral-valve.png">mixtral-8x7b-32768</div>
       </div>
     </div>
 
+    <!-- Toolbar -->
     <div class="toolbar">
-      <button class="tool-button"><span>✂️</span></button>
-      <button class="tool-button"><span>🔗</span></button>
-      <button class="tool-button"><span>📚</span></button>
+      <button class="tool-button" title="Cut"><span>✂️</span></button>
+      <button class="tool-button" title="Link"><span>🔗</span></button>
+      <button class="tool-button" title="Library"><span>📚</span></button>
       <div class="toolbar-right">
-        <button class="tool-button"><span>⚡</span></button>
-        <button class="timer"><span>⏱️</span></button>
-        <button class="tool-button"><span>✨</span></button>
+         <!-- Boost button for theme toggle -->
+    <button class="tool-button theme-toggle-button" title="Toggle Theme"><span>⚡</span></button>
+        <button class="tool-button" title="Timer"><span>⏱️</span></button>
+        <button class="tool-button" title="Magic"><span>✨</span></button>
       </div>
     </div>
 
-    <div class="chat-container" id="chatbox"></div>
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatbox">
+      <!-- Messages will be dynamically injected here -->
+    </div>
 
+    <!-- Input Container -->
     <div class="input-container">
       <textarea 
         id="input-message" 
@@ -52,15 +63,22 @@
         rows="2"
       ></textarea>
       <div class="input-buttons">
-        <button class="format-button" id="file-upload-button">/</button>
-        <input type="file" id="file-upload" style="display: none;" accept=".go,.js,.py,.java,.cpp,.cs,.rb,.php,.swift,.kt,.ts,.rs,.scala,.hs,.lua,.pl,.sh,.sql,.html,.css,.json,.xml,.yaml,.md,.txt">
-        <button class="format-button-2">@</button>
+        <button class="format-button" id="file-upload-button" title="Upload File">/</button>
+        <input 
+          type="file" 
+          id="file-upload" 
+          style="display: none;" 
+          accept=".go,.js,.py,.java,.cpp,.cs,.rb,.php,.swift,.kt,.ts,.rs,.scala,.hs,.lua,.pl,.sh,.sql,.html,.css,.json,.xml,.yaml,.md,.txt" 
+        />
+        <button class="format-button-2" title="Mention">@</button>
       </div>
-      <button id="send-button" class="send-button">➤</button>
+      <button id="send-button" class="send-button" title="Send">➤</button>
     </div>
   </div>
- <script type="module" src="fileHandler.js"></script>
+
+  <!-- JavaScript Modules -->
+  <script type="module" src="fileHandler.js"></script>
   <script type="module" src="popup.js"></script>
+
 </body>
 </html>
-

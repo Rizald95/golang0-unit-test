@@ -30,7 +30,16 @@
     },
 	"web_accessible_resources": [
       {
-        "resources": ["file-generator.html", "file-generator.js", "file-generator.css"],
+        "resources": [
+		 "assets/prism/*",
+		"file-generator.html",
+		"file-generator.js",
+		"file-generator.css",
+		"timer.html",
+		"timer.css",
+		"timer.js"
+		
+		],
         "matches": ["<all_urls>"]
       }
     ]
