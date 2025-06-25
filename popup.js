@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectedModelSpan = document.getElementById("selected-model");
   const modelIcon = document.getElementById("model-icon");
 
-  let currentModel = "mixtral-8x7b-32768"; // Default model
+  let currentModel = "mistral-saba-24b"; // Default model
   let currentModelIcon = "assets/mistral-valve.png"; // Default model icon
    let uploadedFileName = null;
    
@@ -87,6 +87,15 @@ window.addEventListener('DOMContentLoaded', () => {
     chrome.tabs.create({ url: "timer.html" });
   });
 });
+
+document.getElementById("settings-button").addEventListener("click", () => {
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage();
+  } else {
+    window.open(chrome.runtime.getURL("options/index.html"));
+  }
+});
+
 
   document.addEventListener("click", (e) => {
     if (!modelSelector.contains(e.target)) {
