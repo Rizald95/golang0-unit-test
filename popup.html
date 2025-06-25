@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Golang Unit Test Generator - AI-powered code generation tool" />
   <title>Golang Unit Test Generator</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="assets/prism/prism-tomorrow.min.css" />
   <script src="assets/prism/prism.min.js"></script>
   <script src="assets/prism/prism-go.min.js"></script>
 </head>
-<body>
+<body class="light-mode">
   <div class="side-panel">
     <!-- Header -->
     <header class="header">
-      <button class="menu-button" id="settings-button">☰</button>
+      <button class="menu-button" id="settings-button" aria-label="Open Settings">☰</button>
 
       <h1>Hi Programmer,</h1>
       <p>How can I assist you today?</p>
@@ -21,59 +22,109 @@
 
     <!-- Promo Banner -->
     <div class="promo-banner">
-      <img src="assets/chrome.png" alt="Promo" class="promo-icon" />
+      <img src="assets/chrome.png" alt="Chrome Extension" class="promo-icon" />
       <span>Golang Unit Test Generator Beta version</span>
     </div>
 
     <!-- Model Selector -->
-    <div class="model-selector">
-      <img src="assets/gpt.png" alt="ChatGPT" class="model-icon" id="model-icon" />
+    <div class="model-selector" role="button" tabindex="0" aria-label="Select AI Model">
+      <img src="assets/gpt.png" alt="Current Model" class="model-icon" id="model-icon" />
       <span id="selected-model">Choose Model</span>
-      <span class="dropdown-icon">▼</span>
-      <div class="model-dropdown">
-        <div class="model-option" data-model="gemma2-9b-it" data-icon="assets/search.png">gemma2-9b-it</div>
-        <div class="model-option" data-model="llama-3.3-70b-versatile" data-icon="assets/meta.png">llama-3.3-70b-versatile</div>
-        <div class="model-option" data-model="mistral-saba-24b" data-icon="assets/mistral-valve.png">mistral-saba-24b</div>
+      <span class="dropdown-icon" aria-hidden="true">▼</span>
+      <div class="model-dropdown" role="menu" aria-hidden="true">
+        <div class="model-option" data-model="gemma2-9b-it" data-icon="assets/search.png" role="menuitem" tabindex="-1">
+          <img src="assets/search.png" alt="Gemma" class="option-icon" />
+          gemma2-9b-it
+        </div>
+        <div class="model-option" data-model="llama-3.3-70b-versatile" data-icon="assets/meta.png" role="menuitem" tabindex="-1">
+          <img src="assets/meta.png" alt="Llama" class="option-icon" />
+          llama-3.3-70b-versatile
+        </div>
+        <div class="model-option" data-model="mistral-saba-24b" data-icon="assets/mistral-valve.png" role="menuitem" tabindex="-1">
+          <img src="assets/mistral-valve.png" alt="Mistral" class="option-icon" />
+          mistral-saba-24b
+        </div>
+        <div class="model-option" data-model="deepseek-r1-distill-llama-70b" data-icon="assets/deepseek.png" role="menuitem" tabindex="-1">
+          <img src="assets/deepseek.png" alt="DeepSeek" class="option-icon" />
+          deepseek-r1-distill-llama-70b
+          <span class="model-badge">Reasoning</span>
+        </div>
       </div>
     </div>
 
     <!-- Toolbar -->
-    <div class="toolbar">
-      <button class="tool-button" title="Cut"><span>✂️</span></button>
-      <button class="tool-button" title="Link"><span>🔗</span></button>
-      <button class="tool-button" title="Library"><span>📚</span></button>
+    <div class="toolbar" role="toolbar" aria-label="Tool buttons">
+      <button class="tool-button" title="Cut" aria-label="Cut"><span>✂️</span></button>
+      <button class="tool-button" title="Link" aria-label="Add Link"><span>🔗</span></button>
+      <button class="tool-button" title="Library" aria-label="Code Library"><span>📚</span></button>
       <div class="toolbar-right">
-         <!-- Boost button for theme toggle -->
-    <button class="tool-button theme-toggle-button" title="Toggle Theme"><span>⚡</span></button>
-        <button class="tool-button" title="Timer"><span>⏱️</span></button>
-        <button class="tool-button" title="Magic"><span>✨</span></button>
+        <!-- Theme toggle button -->
+        <button class="tool-button theme-toggle-button" title="Toggle Theme" aria-label="Toggle Dark/Light Mode">
+          <span>🌙</span>
+        </button>
+        <button class="tool-button" id="timer-button" title="Timer" aria-label="Usage Timer"><span>⏱️</span></button>
+        <button class="tool-button" title="Magic" aria-label="AI Magic"><span>✨</span></button>
       </div>
     </div>
 
     <!-- Chat Container -->
-    <div class="chat-container" id="chatbox">
+    <div class="chat-container" id="chatbox" role="log" aria-live="polite" aria-label="Chat messages">
       <!-- Messages will be dynamically injected here -->
+      <div class="welcome-message">
+        <div class="welcome-icon">🚀</div>
+        <h3>Welcome to Golang Unit Test Generator!</h3>
+        <p>Upload your Go files or paste your code to generate comprehensive unit tests using AI.</p>
+        <div class="quick-actions">
+          <button class="quick-action-btn" data-prompt="Generate unit tests for a simple Go function">
+            📝 Generate Tests
+          </button>
+          <button class="quick-action-btn" data-prompt="Explain Go testing best practices">
+            📚 Testing Guide
+          </button>
+          <button class="quick-action-btn" data-prompt="Create a Go project structure">
+            🏗️ Project Setup
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Input Container -->
     <div class="input-container">
-      <textarea 
-        id="input-message" 
-        placeholder="Type a message..." 
-        class="message-input" 
-        rows="2"
-      ></textarea>
+      <div class="input-wrapper">
+        <textarea 
+          id="input-message" 
+          placeholder="Type a message or upload a Go file..." 
+          class="message-input" 
+          rows="2"
+          aria-label="Message input"
+          maxlength="4000"
+        ></textarea>
+        <div class="char-counter">
+          <span id="char-count">0</span>/4000
+        </div>
+      </div>
       <div class="input-buttons">
-        <button class="format-button" id="file-upload-button" title="Upload File">/</button>
+        <button class="format-button" id="file-upload-button" title="Upload File" aria-label="Upload code file">
+          📁
+        </button>
         <input 
           type="file" 
           id="file-upload" 
           style="display: none;" 
-          accept=".go,.js,.py,.java,.cpp,.cs,.rb,.php,.swift,.kt,.ts,.rs,.scala,.hs,.lua,.pl,.sh,.sql,.html,.css,.json,.xml,.yaml,.md,.txt" 
+          accept=".go,.js,.py,.java,.cpp,.cs,.rb,.php,.swift,.kt,.ts,.rs,.scala,.hs,.lua,.pl,.sh,.sql,.html,.css,.json,.xml,.yaml,.md,.txt"
+          aria-label="File upload input"
         />
-        <button class="format-button-2" title="Mention">@</button>
+        <button class="format-button-2" title="Quick Actions" aria-label="Quick action menu">@</button>
       </div>
-      <button id="send-button" class="send-button" title="Send">➤</button>
+      <button id="send-button" class="send-button" title="Send Message" aria-label="Send message">
+        ➤
+      </button>
+    </div>
+
+    <!-- Loading indicator -->
+    <div class="loading-indicator" id="loading-indicator" style="display: none;">
+      <div class="loading-spinner"></div>
+      <span>AI is thinking...</span>
     </div>
   </div>
 
