@@ -1,4 +1,3 @@
-
 function initializeFileUpload(userInput, appendMessage) {
   const fileUploadButton = document.getElementById("file-upload-button");
   const fileUploadInput = document.getElementById("file-upload");

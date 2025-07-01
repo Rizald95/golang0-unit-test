@@ -20,16 +20,40 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeFileUpload(userInput, appendMessage);
 	 initializeTheme();
 	
+ // ✅ BARU: Character counter functionality
+  const charCount = document.getElementById("char-count")
+  const maxLength = 4000
+
+  userInput.addEventListener("input", () => {
+    const currentLength = userInput.value.length
+    charCount.textContent = currentLength
+
+    // Update send button state
+    const isEmpty = userInput.value.trim() === ""
+    sendBtn.disabled = isEmpty
+
+    // Update character counter color based on usage
+    if (currentLength > maxLength * 0.9) {
+      charCount.style.color = "var(--error-color)"
+    } else if (currentLength > maxLength * 0.7) {
+      charCount.style.color = "var(--warning-color)"
+    } else {
+      charCount.style.color = "var(--text-secondary)"
+    }
+  })
+
+  // ✅ BARU: Initialize send button state
+  sendBtn.disabled = true
 
   userInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && event.shiftKey) {
-      event.preventDefault();
-      userInput.value += "\n";
+      event.preventDefault()
+      userInput.value += "\n"
     } else if (event.key === "Enter") {
-      event.preventDefault();
-      sendBtn.click();
+      event.preventDefault()
+      sendBtn.click()
     }
-  });
+  })
   
   // Get the theme toggle button
 const themeToggleButton = document.querySelector('.theme-toggle-button');
@@ -86,6 +110,14 @@ window.addEventListener('DOMContentLoaded', () => {
   timerButton.addEventListener("click", () => {
     chrome.tabs.create({ url: "timer.html" });
   });
+});
+
+document.getElementById("settings-button").addEventListener("click", () => {
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage();
+  } else {
+    window.open(chrome.runtime.getURL("options/index.html"));
+  }
 });
 
   document.addEventListener("click", (e) => {
