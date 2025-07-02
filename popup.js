@@ -562,18 +562,67 @@ document.getElementById("settings-button").addEventListener("click", () => {
   }
 
   // ✅ RESET CONVERSATION FUNCTION (for testing or manual reset)
-  function resetConversation() {
-    console.log("🔄 Resetting conversation")
-    conversationStarted = false
-    messageCount = 0
-    saveConversationState()
+  // ✅ RESET CONVERSATION FUNCTION (DIPERBAIKI)
+function resetConversation() {
+  console.log("🔄 Resetting conversation")
+  conversationStarted = false
+  messageCount = 0
+  saveConversationState()
 
-    // Clear chat messages (keep welcome message)
-    const messages = chatbox.querySelectorAll(".message")
-    messages.forEach((msg) => msg.remove())
+  // ✅ PERBAIKAN: Clear ALL message types (including DeepSeek special elements)
+  const messagesToRemove = chatbox.querySelectorAll(`
+    .message,
+    .thinking-message,
+    .code-message,
+    .text-message,
+    .response-content,
+    .code-display,
+    .generated-code,
+    [class*="deepseek"],
+    [class*="thinking"],
+    [class*="code-section"]
+  `)
 
-    showWelcomeMessage()
+  messagesToRemove.forEach((element) => {
+    console.log("🗑️ Removing element:", element.className)
+    element.remove()
+  })
+
+  // ✅ PERBAIKAN: Alternative - Clear entire chatbox content except welcome message
+  const allChildren = Array.from(chatbox.children)
+  allChildren.forEach((child) => {
+    if (!child.classList.contains("welcome-message")) {
+      child.remove()
+    }
+  })
+
+  // Clear any validation errors
+  clearValidationError()
+
+  // ✅ PERBAIKAN: Reset input field
+  const userInput = document.getElementById("input-message")
+  if (userInput) {
+    userInput.value = ""
+    userInput.dispatchEvent(new Event("input")) // Trigger validation reset
   }
+
+  // ✅ PERBAIKAN: Reset send button
+  const sendBtn = document.getElementById("send-button")
+  if (sendBtn) {
+    sendBtn.disabled = true
+  }
+
+  // ✅ PERBAIKAN: Reset character counter
+  const charCount = document.getElementById("char-count")
+  if (charCount) {
+    charCount.textContent = "0"
+    charCount.style.color = "var(--text-secondary)"
+  }
+
+  showWelcomeMessage()
+
+  console.log("✅ Conversation reset complete")
+}
 
   // ✅ Add reset button to toolbar (for testing - can be removed in production)
   const toolbar = document.querySelector(".toolbar")
