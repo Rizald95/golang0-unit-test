@@ -348,12 +348,19 @@ document.getElementById("settings-button").addEventListener("click", () => {
           appendMessage(content, "assistant", currentModelIcon)
         }
 		
+		// ✅ SAVE TO CHAT HISTORY
+		saveChatHistory(inputText, content, currentModel)
+		
 		messageCount++
         saveConversationState()
       }
     } catch (error) {
-      console.error("Error:", error)
-      appendMessage("Error occurred: " + error.message, "assistant", currentModelIcon)
+		console.error("Error:", error)
+		const errorMessage = "Error occurred: " + error.message
+		appendMessage(errorMessage, "assistant", currentModelIcon)
+
+		// ✅ SAVE ERROR TO CHAT HISTORY TOO
+		saveChatHistory(inputText, errorMessage, currentModel)
     }
   });
   
@@ -544,6 +551,59 @@ document.getElementById("settings-button").addEventListener("click", () => {
       localStorage.setItem("messageCount", messageCount.toString())
     }
   }
+  
+  // ✅ CHAT HISTORY MANAGEMENT FUNCTIONS
+  function saveChatHistory(userMessage, assistantResponse, model) {
+    const timestamp = new Date().toISOString()
+    const historyEntry = {
+      model: model,
+      message: userMessage,
+      response: assistantResponse,
+      timestamp: timestamp,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+    }
+
+    console.log("💾 Saving chat history entry:", historyEntry)
+
+    if (typeof chrome !== "undefined" && chrome.storage) {
+      chrome.storage.local.get("chatHistory", (result) => {
+        const chatHistory = result.chatHistory || []
+        chatHistory.push(historyEntry)
+
+        // Keep only last 100 entries to prevent storage overflow
+        if (chatHistory.length > 100) {
+          chatHistory.splice(0, chatHistory.length - 100)
+        }
+
+        chrome.storage.local.set({ chatHistory: chatHistory }, () => {
+          console.log("✅ Chat history saved successfully")
+        })
+      })
+    } else {
+      // Fallback to localStorage
+      const chatHistory = JSON.parse(localStorage.getItem("chatHistory") || "[]")
+      chatHistory.push(historyEntry)
+
+      if (chatHistory.length > 100) {
+        chatHistory.splice(0, chatHistory.length - 100)
+      }
+
+      localStorage.setItem("chatHistory", JSON.stringify(chatHistory))
+      console.log("✅ Chat history saved to localStorage")
+    }
+  }
+
+  function clearChatHistory() {
+    if (typeof chrome !== "undefined" && chrome.storage) {
+      chrome.storage.local.set({ chatHistory: [] }, () => {
+        console.log("🗑️ Chat history cleared")
+      })
+    } else {
+      localStorage.setItem("chatHistory", "[]")
+    }
+  }
+
 
   function hideWelcomeMessage() {
     console.log("👋 Hiding welcome message")
@@ -565,12 +625,16 @@ document.getElementById("settings-button").addEventListener("click", () => {
   // ✅ RESET CONVERSATION FUNCTION (DIPERBAIKI)
 function resetConversation() {
   console.log("🔄 Resetting conversation")
-  conversationStarted = false
-  messageCount = 0
-  saveConversationState()
 
-  // ✅ PERBAIKAN: Clear ALL message types (including DeepSeek special elements)
-  const messagesToRemove = chatbox.querySelectorAll(`
+    // Ask user if they want to clear chat history too
+    const clearHistory = confirm("Do you want to clear chat history as well?")
+
+    conversationStarted = false
+    messageCount = 0
+    saveConversationState()
+
+    // Clear ALL message types (including DeepSeek special elements)
+    const messagesToRemove = chatbox.querySelectorAll(`
     .message,
     .thinking-message,
     .code-message,
@@ -583,45 +647,50 @@ function resetConversation() {
     [class*="code-section"]
   `)
 
-  messagesToRemove.forEach((element) => {
-    console.log("🗑️ Removing element:", element.className)
-    element.remove()
-  })
+    messagesToRemove.forEach((element) => {
+      console.log("🗑️ Removing element:", element.className)
+      element.remove()
+    })
 
-  // ✅ PERBAIKAN: Alternative - Clear entire chatbox content except welcome message
-  const allChildren = Array.from(chatbox.children)
-  allChildren.forEach((child) => {
-    if (!child.classList.contains("welcome-message")) {
-      child.remove()
+    // Alternative: Clear entire chatbox content except welcome message
+    const allChildren = Array.from(chatbox.children)
+    allChildren.forEach((child) => {
+      if (!child.classList.contains("welcome-message")) {
+        child.remove()
+      }
+    })
+
+    // Clear any validation errors
+    clearValidationError()
+
+    // Reset input field
+    const userInput = document.getElementById("input-message")
+    if (userInput) {
+      userInput.value = ""
+      userInput.dispatchEvent(new Event("input"))
     }
-  })
 
-  // Clear any validation errors
-  clearValidationError()
+    // Reset send button
+    const sendBtn = document.getElementById("send-button")
+    if (sendBtn) {
+      sendBtn.disabled = true
+    }
 
-  // ✅ PERBAIKAN: Reset input field
-  const userInput = document.getElementById("input-message")
-  if (userInput) {
-    userInput.value = ""
-    userInput.dispatchEvent(new Event("input")) // Trigger validation reset
-  }
+    // Reset character counter
+    const charCount = document.getElementById("char-count")
+    if (charCount) {
+      charCount.textContent = "0"
+      charCount.style.color = "var(--text-secondary)"
+    }
 
-  // ✅ PERBAIKAN: Reset send button
-  const sendBtn = document.getElementById("send-button")
-  if (sendBtn) {
-    sendBtn.disabled = true
-  }
+    // ✅ CLEAR CHAT HISTORY IF REQUESTED
+    if (clearHistory) {
+      clearChatHistory()
+    }
 
-  // ✅ PERBAIKAN: Reset character counter
-  const charCount = document.getElementById("char-count")
-  if (charCount) {
-    charCount.textContent = "0"
-    charCount.style.color = "var(--text-secondary)"
-  }
+    showWelcomeMessage()
 
-  showWelcomeMessage()
-
-  console.log("✅ Conversation reset complete")
+    console.log("✅ Conversation reset complete")
 }
 
   // ✅ Add reset button to toolbar (for testing - can be removed in production)
@@ -633,6 +702,23 @@ function resetConversation() {
     resetButton.innerHTML = "<span>🔄</span>"
     resetButton.addEventListener("click", resetConversation)
     toolbar.appendChild(resetButton)
+	
+	// ✅ ADD CHAT HISTORY BUTTON
+    const historyButton = document.createElement("button")
+    historyButton.className = "tool-button"
+    historyButton.title = "View Chat History"
+    historyButton.innerHTML = "<span>📜</span>"
+    historyButton.addEventListener("click", () => {
+      if (chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage()
+        setTimeout(() => {
+          window.open(chrome.runtime.getURL("options/chatHistory.html"))
+        }, 100)
+      } else {
+        window.open(chrome.runtime.getURL("options/chatHistory.html"))
+      }
+    })
+    toolbar.appendChild(historyButton)
   }
   
    // ✅ DETECT THINKING TAGS
