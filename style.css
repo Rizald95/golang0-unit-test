@@ -249,11 +249,35 @@ body {
   text-align: center;
   padding: 40px 20px;
   color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.welcome-message.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
 }
 
 .welcome-icon {
   font-size: 48px;
   margin-bottom: 16px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
 }
 
 .welcome-message h3 {
@@ -289,6 +313,8 @@ body {
 .quick-action-btn:hover {
   background-color: var(--hover-bg);
   border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Messages */
@@ -301,6 +327,18 @@ body {
   align-items: flex-start;
   background-color: var(--message-bg);
   color: var(--foreground);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .message.user {
@@ -437,8 +475,19 @@ body {
   line-height: 1.5;
   background-color: var(--input-bg);
   color: var(--foreground);
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease; /* ← TAMBAHKAN box-shadow transition */
   box-sizing: border-box;
+}
+
+/* ✅ Enhanced input validation styles */
+.message-input.invalid {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+}
+
+.message-input.valid {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 .char-counter {
@@ -512,6 +561,12 @@ body {
   opacity: 0.5;
 }
 
+/* ✅ Keyword suggestion styles */
+.keyword-suggestion:hover {
+  background-color: var(--accent-hover) !important;
+  transform: scale(1.05);
+}
+
 /* Loading Indicator */
 .loading-indicator {
   position: fixed;
@@ -544,6 +599,29 @@ body {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* ✅ Validation feedback animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
   }
 }
 
@@ -636,7 +714,7 @@ body {
 
 /* Utility Classes */
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 /* Responsive Design */
@@ -659,6 +737,14 @@ body {
 
   .quick-actions {
     max-width: 100%;
+  }
+
+  /* ✅ Mobile validation adjustments */
+  #validation-error,
+  #keyword-suggestions {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 70px !important;
   }
 }
 
@@ -692,4 +778,243 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ✅ FIXED: Validation Error Styles */
+#validation-error {
+  position: fixed !important;
+  bottom: 90px !important;
+  left: 20px !important;
+  right: 20px !important;
+  background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+  color: white !important;
+  padding: 16px 20px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  z-index: 9999 !important;
+  box-shadow: 0 8px 32px rgba(244, 67, 54, 0.4) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  animation: slideUpError 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  max-width: calc(100vw - 40px) !important;
+  box-sizing: border-box !important;
+}
+
+#validation-error .error-content {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+#validation-error .error-icon {
+  font-size: 20px !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+}
+
+#validation-error .error-text {
+  flex: 1 !important;
+  line-height: 1.4 !important;
+}
+
+/* ✅ FIXED: Keyword Suggestions Styles */
+#keyword-suggestions {
+  position: fixed !important;
+  bottom: 160px !important;
+  left: 20px !important;
+  right: 20px !important;
+  background: var(--message-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  z-index: 9998 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: blur(10px) !important;
+  animation: slideUpSuggestions 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  max-width: calc(100vw - 40px) !important;
+  box-sizing: border-box !important;
+}
+
+#keyword-suggestions .suggestions-header {
+  margin-bottom: 12px !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+#keyword-suggestions .suggestions-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+.keyword-suggestion {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover)) !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: none !important;
+  user-select: none !important;
+}
+
+.keyword-suggestion:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3) !important;
+  background: linear-gradient(135deg, var(--accent-hover), #004494) !important;
+}
+
+.keyword-suggestion:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+#keyword-suggestions .suggestions-footer {
+  font-size: 11px !important;
+  color: var(--text-secondary) !important;
+  text-align: center !important;
+  margin-top: 8px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid var(--border-color) !important;
+}
+
+/* ✅ FIXED: Validation Indicator Styles */
+#validation-indicator {
+  position: fixed !important;
+  bottom: 90px !important;
+  left: 20px !important;
+  right: 20px !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  z-index: 9997 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  max-width: calc(100vw - 40px) !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+#validation-indicator.valid {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.1)) !important;
+  color: var(--success-color) !important;
+  border: 1px solid rgba(76, 175, 80, 0.3) !important;
+}
+
+#validation-indicator.invalid {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(244, 67, 54, 0.1)) !important;
+  color: var(--error-color) !important;
+  border: 1px solid rgba(244, 67, 54, 0.3) !important;
+}
+
+/* ✅ FIXED: Animation Keyframes */
+@keyframes slideUpError {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUpSuggestions {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideDownError {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+}
+
+/* ✅ FIXED: Mobile Responsive Adjustments */
+@media (max-width: 480px) {
+  #validation-error {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 80px !important;
+    padding: 14px 16px !important;
+    font-size: 13px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  #keyword-suggestions {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 140px !important;
+    padding: 16px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  #validation-indicator {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 80px !important;
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  .keyword-suggestion {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+  }
+}
+
+/* ✅ FIXED: Dark Mode Support */
+.dark-mode #keyword-suggestions {
+  background: var(--panel-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode #validation-indicator.valid {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1)) !important;
+}
+
+.dark-mode #validation-indicator.invalid {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.1)) !important;
+}
+
+/* ✅ FIXED: Prevent Text Selection on Interactive Elements */
+.keyword-suggestion,
+#validation-error,
+#keyword-suggestions {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* ✅ FIXED: Ensure proper stacking context */
+.input-container {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.side-panel {
+  position: relative !important;
+  z-index: 2 !important;
 }

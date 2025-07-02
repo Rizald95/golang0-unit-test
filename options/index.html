@@ -7,20 +7,112 @@
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+      ◀
+    </button>
+    
     <h2>Settings</h2>
     <ul class="nav">
-      <li><a href="profile.html">👤 Profile</a></li>
-      <li><a href="chatHistory.html">🕑 Chat History</a></li>
-      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
+      <li>
+        <a href="profile.html" title="Profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="chatHistory.html" title="Chat History">
+          <span class="nav-icon">🕑</span>
+          <span class="nav-text">Chat History</span>
+        </a>
+      </li>
+      <li>
+        <a href="modelBenchmark.html" title="Benchmark">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Benchmark</span>
+        </a>
+      </li>
+      <li>
+        <a href="generate-tests.html" title="Generate Tests">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Generate Tests</span>
+        </a>
+      </li>
+      <li>
+        <a href="testing-guide.html" title="Testing Guide">
+          <span class="nav-icon">📚</span>
+          <span class="nav-text">Testing Guide</span>
+        </a>
+      </li>
+      <li>
+        <a href="project-setup.html" title="Project Setup">
+          <span class="nav-icon">🏗️</span>
+          <span class="nav-text">Project Setup</span>
+        </a>
+      </li>
     </ul>
   </div>
 
-  <div class="content">
-    <h1>Welcome to Settings</h1>
-    <p>Select a category from the sidebar to get started.</p>
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="content" id="content">
+    <h1>⚙️ Welcome to Settings</h1>
+    <p>Configure your Golang Unit Test Generator extension and explore helpful resources.</p>
+    
+    <div class="feature-section">
+      <h2>🚀 Quick Start</h2>
+      <p>Get started with generating unit tests for your Go projects:</p>
+      <ol>
+        <li>Select a model (DeepSeek recommended for reasoning)</li>
+        <li>Upload your Go file or paste your code</li>
+        <li>Ask the AI to generate comprehensive unit tests</li>
+        <li>Review and customize the generated tests</li>
+      </ol>
+    </div>
+
+    <div class="feature-section">
+      <h2>📋 Available Features</h2>
+      <div class="prompt-examples">
+        <div class="prompt-card">
+          <h3>👤 Profile Management</h3>
+          <p>Manage your user profile, avatar, and personal settings</p>
+        </div>
+        <div class="prompt-card">
+          <h3>🕑 Chat History</h3>
+          <p>View and manage your conversation history with AI models</p>
+        </div>
+        <div class="prompt-card">
+          <h3>📊 Model Benchmark</h3>
+          <p>Compare performance metrics across different AI models</p>
+        </div>
+        <div class="prompt-card">
+          <h3>📝 Generate Tests</h3>
+          <p>Learn how to generate comprehensive unit tests for Go functions</p>
+        </div>
+        <div class="prompt-card">
+          <h3>📚 Testing Guide</h3>
+          <p>Best practices and guidelines for Go testing</p>
+        </div>
+        <div class="prompt-card">
+          <h3>🏗️ Project Setup</h3>
+          <p>Standard Go project structure and organization tips</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-section">
+      <h2>🤖 Supported Models</h2>
+      <ul>
+        <li><strong>DeepSeek R1:</strong> Advanced reasoning capabilities for complex test generation</li>
+        <li><strong>Llama 3.3 70B:</strong> High-quality code generation and explanation</li>
+        <li><strong>Mistral Saba:</strong> Fast and efficient for simple test cases</li>
+        <li><strong>Gemma 2 9B:</strong> Lightweight option for basic testing needs</li>
+      </ul>
+    </div>
   </div>
 
+  <script src="sidebar-toggle.js"></script>
   <script src="index.js"></script>
 </body>
 </html>

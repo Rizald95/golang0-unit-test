@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Go Testing Guide</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Settings</h2>
+    <ul class="nav">
+      <li><a href="profile.html">👤 Profile</a></li>
+      <li><a href="chatHistory.html">🕑 Chat History</a></li>
+      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
+      <li><a href="generate-tests.html">📝 Generate Tests</a></li>
+      <li><a href="testing-guide.html" class="active">📚 Testing Guide</a></li>
+      <li><a href="project-setup.html">🏗️ Project Setup</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1>📚 Go Testing Best Practices</h1>
+    <p>Learn the best practices for writing effective unit tests in Go.</p>
+    
+    <div class="guide-section">
+      <h2>1. Test File Naming</h2>
+      <div class="code-example">
+        <pre><code>// For file: calculator.go
+// Test file: calculator_test.go</code></pre>
+      </div>
+      <p>Test files should end with <code>_test.go</code> and be in the same package.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2>2. Test Function Naming</h2>
+      <div class="code-example">
+        <pre><code>func TestAdd(t *testing.T) { ... }
+func TestAdd_WithNegativeNumbers(t *testing.T) { ... }
+func TestAdd_ShouldReturnError_WhenInputIsInvalid(t *testing.T) { ... }</code></pre>
+      </div>
+      <p>Use descriptive names that explain what is being tested.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2>3. Table-Driven Tests</h2>
+      <div class="code-example">
+        <pre><code>func TestAdd(t *testing.T) {
+    tests := []struct {
+        name     string
+        a, b     int
+        expected int
+    }{
+        {"positive numbers", 2, 3, 5},
+        {"negative numbers", -1, -2, -3},
+        {"zero values", 0, 0, 0},
+    }
+    
+    for _, tt := range tests {
+        t.Run(tt.name, func(t *testing.T) {
+            result := Add(tt.a, tt.b)
+            if result != tt.expected {
+                t.Errorf("Add(%d, %d) = %d; want %d", 
+                    tt.a, tt.b, result, tt.expected)
+            }
+        })
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2>4. Error Testing</h2>
+      <div class="code-example">
+        <pre><code>func TestDivide_ShouldReturnError_WhenDivideByZero(t *testing.T) {
+    _, err := Divide(10, 0)
+    if err == nil {
+        t.Error("Expected error when dividing by zero")
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2>5. Benchmarking</h2>
+      <div class="code-example">
+        <pre><code>func BenchmarkAdd(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Add(1, 2)
+    }
+}</code></pre>
+      </div>
+      <p>Run with: <code>go test -bench=.</code></p>
+    </div>
+
+    <div class="guide-section">
+      <h2>6. Test Coverage</h2>
+      <div class="code-example">
+        <pre><code># Generate coverage report
+go test -cover
+
+# Generate detailed HTML coverage report
+go test -coverprofile=coverage.out
+go tool cover -html=coverage.out</code></pre>
+      </div>
+    </div>
+
+    <button class="action-button" id="apply-practices">
+      🚀 Apply These Practices
+    </button>
+  </div>
+
+  <script src="quick-actions.js"></script>
+</body>
+</html>

@@ -4,6 +4,129 @@ import { initializeFileUpload, detectLanguage } from './fileHandler.js';
 const apiKey = "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"; // API Key Groq
 const apiURL = "https://api.groq.com/openai/v1/chat/completions";
 
+// ✅ Conversation state management
+let conversationStarted = false
+let messageCount = 0
+
+// ✅ KEYWORD FILTER CONFIGURATION
+const ALLOWED_KEYWORDS = [
+  // Core testing terms
+  "unit test",
+  "unittest",
+  "unit-test",
+  "unit testing",
+  "test",
+  "testing",
+  "tests",
+  "tester",
+  "tdd",
+  "bdd",
+  "test driven",
+  "behavior driven",
+
+  // Go/Golang specific
+  "golang",
+  "go",
+  "go lang",
+  "go language",
+  "go test",
+  "go testing",
+  "go unit test",
+
+  // Testing concepts
+  "mock",
+  "mocking",
+  "mocks",
+  "mockery",
+  "stub",
+  "stubbing",
+  "stubs",
+  "assert",
+  "assertion",
+  "assertions",
+  "coverage",
+  "test coverage",
+  "code coverage",
+  "benchmark",
+  "benchmarking",
+  "benchmarks",
+
+  // Go specific terms
+  "function",
+  "func",
+  "method",
+  "methods",
+  "package",
+  "struct",
+  "interface",
+  "interfaces",
+  "error handling",
+  "error",
+  "errors",
+  "table driven",
+  "table-driven",
+  "table test",
+
+  // Testing types
+  "integration test",
+  "integration testing",
+  "end to end",
+  "e2e",
+  "end-to-end",
+  "acceptance test",
+  "acceptance testing",
+  "regression test",
+  "regression testing",
+
+  // Testing tools and frameworks
+  "testify",
+  "ginkgo",
+  "gomega",
+  "goconvey",
+  "httptest",
+  "testing.t",
+  "testing.b",
+
+  // Code quality
+  "refactor",
+  "refactoring",
+  "clean code",
+  "code review",
+  "quality",
+  "best practice",
+  "documentation",
+  "comment",
+  "comments",
+
+  // Development terms
+  "debug",
+  "debugging",
+  "fix",
+  "bug",
+  "issue",
+  "implement",
+  "implementation",
+  "develop",
+  "generate",
+  "create",
+  "build",
+  "write",
+]
+
+
+// ✅ Function to open quick action pages
+function openQuickAction(page) {
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage()
+    // After a short delay, navigate to the specific page
+    setTimeout(() => {
+      window.open(chrome.runtime.getURL(`options/${page}.html`))
+    }, 100)
+  } else {
+    window.open(chrome.runtime.getURL(`options/${page}.html`))
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const sendBtn = document.getElementById("send-button");
   const userInput = document.getElementById("input-message");
@@ -12,10 +135,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const modelDropdown = document.querySelector(".model-dropdown");
   const selectedModelSpan = document.getElementById("selected-model");
   const modelIcon = document.getElementById("model-icon");
+   const welcomeMessage = document.querySelector(".welcome-message")
 
   let currentModel = "mixtral-8x7b-32768"; // Default model
   let currentModelIcon = "assets/mistral-valve.png"; // Default model icon
    let uploadedFileName = null;
+   
+     // ✅ Load conversation state on startup
+  loadConversationState()
+   
+   // ✅ Initialize quick action buttons
+  document.querySelectorAll(".quick-action-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const action = button.dataset.action
+      if (action) {
+        openQuickAction(action)
+      }
+    })
+  })
    
     initializeFileUpload(userInput, appendMessage);
 	 initializeTheme();
@@ -30,7 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update send button state
     const isEmpty = userInput.value.trim() === ""
-    sendBtn.disabled = isEmpty
+	 const isValid = validateInput(userInput.value.trim())
+    sendBtn.disabled = isEmpty || !isValid
 
     // Update character counter color based on usage
     if (currentLength > maxLength * 0.9) {
@@ -40,6 +178,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       charCount.style.color = "var(--text-secondary)"
     }
+	
+	// ✅ Real-time validation feedback
+    updateInputValidationUI(isValid, userInput.value.trim())
   })
 
   // ✅ BARU: Initialize send button state
@@ -133,9 +274,35 @@ document.getElementById("settings-button").addEventListener("click", () => {
       appendMessage("Please enter a message.", "assistant");
       return;
     }
+	
+	// ✅ Validate input against allowed keywords
+    if (!validateInput(inputText)) {
+      showValidationError(
+        "Your message should be related to unit testing, Go/Golang, or software testing. Please include relevant keywords.",
+        "invalid",
+      )
+      showKeywordSuggestions()
+      return
+    }
 
-    appendMessage(inputText, "user");
-    userInput.value = "";
+    // Clear any existing validation errors
+    clearValidationError()
+	
+    // ✅ Hide welcome message on first user input
+    if (!conversationStarted) {
+      hideWelcomeMessage()
+      conversationStarted = true
+      messageCount = 0
+      saveConversationState()
+    }
+
+    appendMessage(inputText, "user")
+    messageCount++
+    saveConversationState()
+
+    sendBtn.disabled = true
+    charCount.textContent = "0"
+    userInput.value = ""
 
     try {
 		const language = uploadedFileName ? detectLanguage(uploadedFileName) : 'plaintext';
@@ -152,7 +319,7 @@ document.getElementById("settings-button").addEventListener("click", () => {
         body: JSON.stringify({
           model: currentModel,
           messages: [
-            { role: "system", content: `You are using the ${currentModel} model.` },
+            { role: "system", content: `You are using the ${currentModel} model. Focus on Go/Golang unit testing, TDD, and software testing best practices.` },
             { role: "user", content: inputText }
           ],
 		     stream: false,
@@ -180,12 +347,244 @@ document.getElementById("settings-button").addEventListener("click", () => {
         } else {
           appendMessage(content, "assistant", currentModelIcon)
         }
+		
+		messageCount++
+        saveConversationState()
       }
     } catch (error) {
       console.error("Error:", error)
       appendMessage("Error occurred: " + error.message, "assistant", currentModelIcon)
     }
   });
+  
+  
+  
+  // ✅ INPUT VALIDATION FUNCTIONS
+  function validateInput(text) {
+    if (!text || text.length < 3) return false
+
+    const lowerText = text.toLowerCase()
+
+    // Check if text contains any of the allowed keywords
+    return ALLOWED_KEYWORDS.some((keyword) => lowerText.includes(keyword.toLowerCase()))
+  }
+
+  function updateInputValidationUI(isValid, text) {
+  const validationIndicator = document.getElementById("validation-indicator")
+
+  // Remove existing validation indicator
+  if (validationIndicator) {
+    validationIndicator.remove()
+  }
+
+  // Only show validation feedback if there's text
+  if (text.length > 0) {
+    const indicator = document.createElement("div")
+    indicator.id = "validation-indicator"
+    indicator.className = isValid ? "valid" : "invalid"
+
+    indicator.innerHTML = `
+      <span>${isValid ? "✅" : "⚠️"}</span>
+      <span>${isValid ? "Valid input - related to testing!" : "Please include testing-related keywords"}</span>
+    `
+
+    document.body.appendChild(indicator)
+
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+      if (indicator.parentNode) {
+        indicator.remove()
+      }
+    }, 3000)
+  }
+}
+
+  function showValidationError(message, type) {
+  // Remove existing error
+  clearValidationError()
+
+  const errorDiv = document.createElement("div")
+  errorDiv.id = "validation-error"
+
+  errorDiv.innerHTML = `
+    <div class="error-content">
+      <span class="error-icon">🚫</span>
+      <div class="error-text">${message}</div>
+    </div>
+  `
+
+  document.body.appendChild(errorDiv)
+
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (errorDiv.parentNode) {
+      errorDiv.style.animation = "slideDownError 0.3s ease-in"
+      setTimeout(() => errorDiv.remove(), 300)
+    }
+  }, 5000)
+}
+
+ function showKeywordSuggestions() {
+  // Remove existing suggestions
+  const existingSuggestions = document.getElementById("keyword-suggestions")
+  if (existingSuggestions) {
+    existingSuggestions.remove()
+  }
+
+  const suggestionsDiv = document.createElement("div")
+  suggestionsDiv.id = "keyword-suggestions"
+
+  const popularKeywords = [
+    "unit test", "golang", "go testing", "TDD", "mock",
+    "test coverage", "benchmark", "table driven test",
+    "integration test", "error handling"
+  ]
+
+  suggestionsDiv.innerHTML = `
+    <div class="suggestions-header">
+      💡 Try these keywords:
+    </div>
+    <div class="suggestions-grid">
+      ${popularKeywords.map(keyword => `
+        <button class="keyword-suggestion" onclick="insertKeyword('${keyword}')">${keyword}</button>
+      `).join('')}
+    </div>
+    <div class="suggestions-footer">
+      Click on a keyword to insert it into your message
+    </div>
+  `
+
+  document.body.appendChild(suggestionsDiv)
+
+  // Auto-remove after 8 seconds
+  setTimeout(() => {
+    if (suggestionsDiv.parentNode) {
+      suggestionsDiv.style.animation = "slideDownError 0.3s ease-in"
+      setTimeout(() => suggestionsDiv.remove(), 300)
+    }
+  }, 8000)
+}
+
+  // ✅ Global function to insert keywords (called from suggestion clicks)
+  window.insertKeyword = (keyword) => {
+    const currentText = userInput.value
+    const newText = currentText ? `${currentText} ${keyword}` : keyword
+    userInput.value = newText
+    userInput.focus()
+
+    // Trigger input event to update validation
+    userInput.dispatchEvent(new Event("input"))
+
+    // Remove suggestions
+    const suggestions = document.getElementById("keyword-suggestions")
+    if (suggestions) {
+      suggestions.remove()
+    }
+  }
+
+  function clearValidationError() {
+    const errorDiv = document.getElementById("validation-error")
+    if (errorDiv) {
+      errorDiv.remove()
+    }
+
+    const suggestions = document.getElementById("keyword-suggestions")
+    if (suggestions) {
+      suggestions.remove()
+    }
+
+    const indicator = document.getElementById("validation-indicator")
+    if (indicator) {
+      indicator.remove()
+    }
+  }
+  
+   // ✅ CONVERSATION STATE MANAGEMENT FUNCTIONS
+  function loadConversationState() {
+    console.log("🔄 Loading conversation state...")
+
+    if (typeof chrome !== "undefined" && chrome.storage) {
+      chrome.storage.local.get(["conversationStarted", "messageCount"], (result) => {
+        conversationStarted = result.conversationStarted || false
+        messageCount = result.messageCount || 0
+
+        console.log(`📊 Loaded state - Started: ${conversationStarted}, Messages: ${messageCount}`)
+
+        // Show/hide welcome message based on conversation state
+        if (conversationStarted && messageCount > 0) {
+          hideWelcomeMessage()
+        } else {
+          showWelcomeMessage()
+        }
+      })
+    } else {
+      // Fallback to localStorage
+      conversationStarted = localStorage.getItem("conversationStarted") === "true"
+      messageCount = Number.parseInt(localStorage.getItem("messageCount") || "0")
+
+      if (conversationStarted && messageCount > 0) {
+        hideWelcomeMessage()
+      } else {
+        showWelcomeMessage()
+      }
+    }
+  }
+  
+  function saveConversationState() {
+    console.log(`💾 Saving state - Started: ${conversationStarted}, Messages: ${messageCount}`)
+
+    if (typeof chrome !== "undefined" && chrome.storage) {
+      chrome.storage.local.set({
+        conversationStarted: conversationStarted,
+        messageCount: messageCount,
+      })
+    } else {
+      // Fallback to localStorage
+      localStorage.setItem("conversationStarted", conversationStarted.toString())
+      localStorage.setItem("messageCount", messageCount.toString())
+    }
+  }
+
+  function hideWelcomeMessage() {
+    console.log("👋 Hiding welcome message")
+    if (welcomeMessage) {
+      welcomeMessage.style.display = "none"
+      welcomeMessage.classList.add("hidden")
+    }
+  }
+
+  function showWelcomeMessage() {
+    console.log("🚀 Showing welcome message")
+    if (welcomeMessage) {
+      welcomeMessage.style.display = "block"
+      welcomeMessage.classList.remove("hidden")
+    }
+  }
+
+  // ✅ RESET CONVERSATION FUNCTION (for testing or manual reset)
+  function resetConversation() {
+    console.log("🔄 Resetting conversation")
+    conversationStarted = false
+    messageCount = 0
+    saveConversationState()
+
+    // Clear chat messages (keep welcome message)
+    const messages = chatbox.querySelectorAll(".message")
+    messages.forEach((msg) => msg.remove())
+
+    showWelcomeMessage()
+  }
+
+  // ✅ Add reset button to toolbar (for testing - can be removed in production)
+  const toolbar = document.querySelector(".toolbar")
+  if (toolbar) {
+    const resetButton = document.createElement("button")
+    resetButton.className = "tool-button"
+    resetButton.title = "Reset Conversation"
+    resetButton.innerHTML = "<span>🔄</span>"
+    resetButton.addEventListener("click", resetConversation)
+    toolbar.appendChild(resetButton)
+  }
   
    // ✅ DETECT THINKING TAGS
   function hasThinkingTags(content) {
@@ -412,6 +811,50 @@ chatbox.appendChild(codeBlock);
 
     container.appendChild(textDiv)
     chatbox.appendChild(container)
+  }
+  
+   // ✅ HELPER FUNCTION: Detect language from code content
+  function detectLanguageFromCode(code) {
+    const trimmedCode = code.trim().toLowerCase()
+
+    // Go language detection
+    if (
+      trimmedCode.includes("package main") ||
+      trimmedCode.includes("func main()") ||
+      trimmedCode.includes('import "fmt"')
+    ) {
+      return "go"
+    }
+
+    // JavaScript detection
+    if (
+      trimmedCode.includes("function") ||
+      trimmedCode.includes("const ") ||
+      trimmedCode.includes("let ") ||
+      trimmedCode.includes("console.log")
+    ) {
+      return "javascript"
+    }
+
+    // Python detection
+    if (trimmedCode.includes("def ") || trimmedCode.includes("import ") || trimmedCode.includes("print(")) {
+      return "python"
+    }
+
+    // HTML detection
+    if (trimmedCode.includes("<html") || trimmedCode.includes("<!doctype") || trimmedCode.includes("<div")) {
+      return "html"
+    }
+
+    // CSS detection
+    if (
+      trimmedCode.includes("{") &&
+      (trimmedCode.includes("color:") || trimmedCode.includes("margin:") || trimmedCode.includes("padding:"))
+    ) {
+      return "css"
+    }
+
+    return "plaintext"
   }
 
   function appendMessage(message, sender, iconSrc = null) {

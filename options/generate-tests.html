@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generate Unit Tests</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Settings</h2>
+    <ul class="nav">
+      <li><a href="profile.html">👤 Profile</a></li>
+      <li><a href="chatHistory.html">🕑 Chat History</a></li>
+      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
+      <li><a href="generate-tests.html" class="active">📝 Generate Tests</a></li>
+      <li><a href="testing-guide.html">📚 Testing Guide</a></li>
+      <li><a href="project-setup.html">🏗️ Project Setup</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1>📝 Generate Unit Tests</h1>
+    <p>Create comprehensive unit tests for your Go functions automatically.</p>
+    
+    <div class="feature-section">
+      <h2>How to Generate Tests</h2>
+      <ol>
+        <li>Upload your Go source file or paste your function code</li>
+        <li>Select the DeepSeek model for best results</li>
+        <li>Ask the AI to generate unit tests</li>
+        <li>Review and customize the generated tests</li>
+      </ol>
+    </div>
+
+    <div class="feature-section">
+      <h2>Example Prompts</h2>
+      <div class="prompt-examples">
+        <div class="prompt-card">
+          <h3>Basic Function Testing</h3>
+          <p>"Generate unit tests for this Go function with edge cases and error handling"</p>
+        </div>
+        <div class="prompt-card">
+          <h3>Table-Driven Tests</h3>
+          <p>"Create table-driven tests for this function with multiple test cases"</p>
+        </div>
+        <div class="prompt-card">
+          <h3>Mock Testing</h3>
+          <p>"Generate unit tests with mocks for this function that has dependencies"</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-section">
+      <h2>Best Practices</h2>
+      <ul>
+        <li>Test both happy path and error scenarios</li>
+        <li>Use table-driven tests for multiple inputs</li>
+        <li>Mock external dependencies</li>
+        <li>Test edge cases and boundary conditions</li>
+        <li>Ensure good test coverage</li>
+      </ul>
+    </div>
+
+    <button class="action-button" id="start-generating">
+      🚀 Start Generating Tests
+    </button>
+  </div>
+
+  <script src="quick-actions.js"></script>
+</body>
+</html>

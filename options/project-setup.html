@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Go Project Setup</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Settings</h2>
+    <ul class="nav">
+      <li><a href="profile.html">👤 Profile</a></li>
+      <li><a href="chatHistory.html">🕑 Chat History</a></li>
+      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
+      <li><a href="generate-tests.html">📝 Generate Tests</a></li>
+      <li><a href="testing-guide.html">📚 Testing Guide</a></li>
+      <li><a href="project-setup.html" class="active">🏗️ Project Setup</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1>🏗️ Go Project Structure</h1>
+    <p>Learn how to organize your Go projects for maximum efficiency and maintainability.</p>
+    
+    <div class="structure-section">
+      <h2>Standard Go Project Layout</h2>
+      <div class="file-tree">
+        <pre>
+myproject/
+├── cmd/
+│   └── myapp/
+│       └── main.go
+├── internal/
+│   ├── handler/
+│   │   ├── handler.go
+│   │   └── handler_test.go
+│   └── service/
+│       ├── service.go
+│       └── service_test.go
+├── pkg/
+│   └── utils/
+│       ├── utils.go
+│       └── utils_test.go
+├── api/
+│   └── openapi.yaml
+├── web/
+│   ├── static/
+│   └── templates/
+├── scripts/
+├── docs/
+├── go.mod
+├── go.sum
+├── Makefile
+└── README.md
+        </pre>
+      </div>
+    </div>
+
+    <div class="structure-section">
+      <h2>Directory Explanations</h2>
+      <div class="dir-explanation">
+        <h3>📁 cmd/</h3>
+        <p>Main applications for this project. The directory name should match the name of the executable.</p>
+      </div>
+      
+      <div class="dir-explanation">
+        <h3>📁 internal/</h3>
+        <p>Private application and library code. This is the code you don't want others importing.</p>
+      </div>
+      
+      <div class="dir-explanation">
+        <h3>📁 pkg/</h3>
+        <p>Library code that's ok to use by external applications.</p>
+      </div>
+      
+      <div class="dir-explanation">
+        <h3>📁 api/</h3>
+        <p>OpenAPI/Swagger specs, JSON schema files, protocol definition files.</p>
+      </div>
+      
+      <div class="dir-explanation">
+        <h3>📁 web/</h3>
+        <p>Web application specific components: static web assets, server side templates.</p>
+      </div>
+    </div>
+
+    <div class="structure-section">
+      <h2>Initialize New Project</h2>
+      <div class="code-example">
+        <pre><code># Create new directory
+mkdir myproject && cd myproject
+
+# Initialize Go module
+go mod init github.com/username/myproject
+
+# Create basic structure
+mkdir -p cmd/myapp internal pkg api web docs scripts
+
+# Create main.go
+cat > cmd/myapp/main.go << 'EOF'
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+EOF
+
+# Create go.mod if not exists
+go mod tidy</code></pre>
+      </div>
+    </div>
+
+    <div class="structure-section">
+      <h2>Testing Structure</h2>
+      <div class="code-example">
+        <pre><code># Run all tests
+go test ./...
+
+# Run tests with coverage
+go test -cover ./...
+
+# Run tests in specific package
+go test ./internal/handler
+
+# Run specific test
+go test -run TestHandlerCreate ./internal/handler</code></pre>
+      </div>
+    </div>
+
+    <div class="structure-section">
+      <h2>Makefile Example</h2>
+      <div class="code-example">
+        <pre><code>.PHONY: build test clean run
+
+build:
+	go build -o bin/myapp cmd/myapp/main.go
+
+test:
+	go test -v ./...
+
+coverage:
+	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out
+
+clean:
+	rm -rf bin/
+
+run:
+	go run cmd/myapp/main.go
+
+deps:
+	go mod download
+	go mod tidy</code></pre>
+      </div>
+    </div>
+
+    <button class="action-button" id="create-structure">
+      🚀 Create Project Structure
+    </button>
+  </div>
+
+  <script src="quick-actions.js"></script>
+</body>
+</html>
