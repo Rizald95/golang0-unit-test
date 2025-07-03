@@ -7,45 +7,612 @@
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+      ◀
+    </button>
+    
     <h2>Settings</h2>
     <ul class="nav">
-      <li><a href="profile.html">👤 Profile</a></li>
-      <li><a href="chatHistory.html">🕑 Chat History</a></li>
-      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
-      <li><a href="generate-tests.html">📝 Generate Tests</a></li>
-      <li><a href="testing-guide.html" class="active">📚 Testing Guide</a></li>
-      <li><a href="project-setup.html">🏗️ Project Setup</a></li>
+      <li>
+        <a href="profile.html" title="Profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="chatHistory.html" title="Chat History">
+          <span class="nav-icon">🕑</span>
+          <span class="nav-text">Chat History</span>
+        </a>
+      </li>
+      <li>
+        <a href="modelBenchmark.html" title="Benchmark">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Benchmark</span>
+        </a>
+      </li>
+      <li>
+        <a href="generate-tests.html" title="Generate Tests">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Generate Tests</span>
+        </a>
+      </li>
+      <li>
+        <a href="testing-guide.html" class="active" title="Testing Guide">
+          <span class="nav-icon">📚</span>
+          <span class="nav-text">Testing Guide</span>
+        </a>
+      </li>
+      <li>
+        <a href="project-setup.html" title="Project Setup">
+          <span class="nav-icon">🏗️</span>
+          <span class="nav-text">Project Setup</span>
+        </a>
+      </li>
     </ul>
   </div>
 
-  <div class="content">
-    <h1>📚 Go Testing Best Practices</h1>
-    <p>Learn the best practices for writing effective unit tests in Go.</p>
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="content" id="content">
+    <h1>📚 Go Testing Best Practices & TDD Guide</h1>
+    <p>Learn the best practices for writing effective unit tests in Go using Test-Driven Development (TDD) approach.</p>
     
+    <!-- ✅ NEW TDD INTRODUCTION SECTION -->
     <div class="guide-section">
-      <h2>1. Test File Naming</h2>
-      <div class="code-example">
-        <pre><code>// For file: calculator.go
-// Test file: calculator_test.go</code></pre>
+      <h1>🔄 What is Test-Driven Development (TDD)?</h1>
+      <p>Test-Driven Development (TDD) is a software development methodology where you write tests before writing the actual code. The TDD cycle follows three simple steps:</p>
+      
+      <div class="prompt-examples">
+        <div class="prompt-card">
+          <h3>🔴 Red</h3>
+          <p>Write a failing test that defines the desired functionality</p>
+        </div>
+        <div class="prompt-card">
+          <h3>🟢 Green</h3>
+          <p>Write the minimum code necessary to make the test pass</p>
+        </div>
+        <div class="prompt-card">
+          <h3>🔵 Refactor</h3>
+          <p>Improve the code while keeping all tests passing</p>
+        </div>
       </div>
-      <p>Test files should end with <code>_test.go</code> and be in the same package.</p>
+
+      <h2>🎯 Benefits of TDD</h2>
+      <ul>
+        <li><strong>Better Code Quality:</strong> Forces you to think about design before implementation</li>
+        <li><strong>Comprehensive Coverage:</strong> Ensures every line of code is tested</li>
+        <li><strong>Living Documentation:</strong> Tests serve as examples of how to use your code</li>
+        <li><strong>Confidence in Refactoring:</strong> Safe to modify code knowing tests will catch regressions</li>
+        <li><strong>Faster Debugging:</strong> Failing tests pinpoint exactly what's broken</li>
+      </ul>
+
+      <h2>🚀 How to Implement TDD in Go</h2>
+      <ol>
+        <li><strong>Write a Test First:</strong> Define what you want your function to do</li>
+        <li><strong>Run the Test:</strong> It should fail (Red phase)</li>
+        <li><strong>Write Minimal Code:</strong> Just enough to make the test pass (Green phase)</li>
+        <li><strong>Refactor:</strong> Improve the code while keeping tests green (Refactor phase)</li>
+        <li><strong>Repeat:</strong> Continue the cycle for each new feature</li>
+      </ol>
     </div>
 
+    <!-- ✅ COMPREHENSIVE TDD TUTORIAL -->
     <div class="guide-section">
-      <h2>2. Test Function Naming</h2>
+      <h1>🧪 Comprehensive TDD Tutorial with Go</h1>
+      <p>Go, also known as Golang, is an open-source programming language that could match your business use case especially if you are prioritizing built-in error-handling and speed. To increase the overall system quality and avoid defects, it's also important to emphasize the tests for your Go modules.</p>
+      
+      <p>There are different approaches to Go testing but what we'd like to demonstrate is a way that's familiar for developers in Python or TypeScript using the <strong>testify</strong> library. The first thing you'll notice when you use the testify library is how it is almost like Jest. Furthermore, our approach is simplified but would still follow the test-driven development (TDD) approach.</p>
+
+      <p>By the end of this tutorial, hopefully, the readers will gain a better understanding of:</p>
+      <ul>
+        <li>Go basic tests</li>
+        <li>Go coverage and refactoring</li>
+        <li>Go advanced test modules</li>
+      </ul>
+
+      <p><strong>Reference Repository:</strong> <a href="https://github.com/williaminfante/go_test_starter" target="_blank">https://github.com/williaminfante/go_test_starter</a></p>
+    </div>
+
+    <!-- Overview Section -->
+    <div class="guide-section">
+      <h2>📋 Overview</h2>
+      <p>We'll introduce three kinds of functions in our starter package. These functions were made specifically to introduce the Go testing concepts:</p>
+      
+      <ul>
+        <li><strong>SayHello()</strong> — basics</li>
+        <li><strong>OddOrEven()</strong> — subtests, refactoring, coverage</li>
+        <li><strong>CheckHealth()</strong> — use of more advanced testing libraries</li>
+      </ul>
+
+      <p>To initially create the package, we can run <code>go mod init</code> like below:</p>
+      
       <div class="code-example">
-        <pre><code>func TestAdd(t *testing.T) { ... }
+        <pre><code>mkdir go_test_starter
+go mod init github.com/williaminfante/go_test_starter</code></pre>
+      </div>
+
+      <p>We'll identify our main module as <code>package starter</code> in the <code>starter.go</code> file.</p>
+      
+      <p>For the tests in Go, we usually append <code>_test.go</code> to their associated files. Go will then identify <code>*_test.go</code> files when running tests and coverage. In this example, we'll have <code>starter_test.go</code> in the same directory as <code>starter.go</code> and identify our tests with <code>package starter_test</code>.</p>
+
+      <div class="code-example">
+        <pre><code>package starter_test
+
+import (
+    "testing"
+    "github.com/stretchr/testify/assert"
+    starter "github.com/williaminfante/go_test_starter"
+)</code></pre>
+      </div>
+    </div>
+
+    <!-- Basics of Go Testing -->
+    <div class="guide-section">
+      <h2>🔤 Basics of Go Testing</h2>
+      <p>We'll create a function, <code>SayHello</code>, and by convention, it's usually handy if we can map that function from the package starter to test names like <code>TestSayHello()</code>.</p>
+      
+      <p>We'd like the first function to accept a string name argument like "William" that it uses to return a string "Hello William. Welcome!". Notice how the <code>assert.Equal()</code> is almost like the <code>expect().toEqual()</code> from the Jest library.</p>
+
+      <h3>🔴 Step 1: Write the Test First (Red Phase)</h3>
+      <div class="code-example">
+        <pre><code>package starter_test
+
+import (
+    "testing"
+    "github.com/stretchr/testify/assert"
+    starter "github.com/williaminfante/go_test_starter"
+)
+
+func TestSayHello(t *testing.T) {
+    greeting := starter.SayHello("William")
+    assert.Equal(t, "Hello William. Welcome!", greeting)
+}</code></pre>
+      </div>
+
+      <h3>🟢 Step 2: Create Minimal Implementation (Green Phase)</h3>
+      <p>The test still has a syntax error, so we'll need to create the <code>SayHello()</code> function in <code>starter.go</code> to match the function signature in the test.</p>
+
+      <div class="code-example">
+        <pre><code>package starter
+
+import "fmt"
+
+func SayHello(name string) string {
+    return ""
+}</code></pre>
+      </div>
+
+      <p>To run tests in Go, we can just use <code>go test</code>. We can use <code>go test -v</code> for a verbose version. During the initial phase of development, I prefer using <code>go test -v</code>.</p>
+
+      <div class="code-example">
+        <pre><code>--- FAIL: TestSayHello (0.00s)
+    starter_test.go:12:
+        	Error Trace:	starter_test.go:12
+        	Error:      	Not equal:
+        	            	expected: "Hello William. Welcome!"
+        	            	actual  : ""</code></pre>
+      </div>
+
+      <h3>🔵 Step 3: Make the Test Pass (Refactor Phase)</h3>
+      <p>Cool, so it's running, and we just need to find a way to use the input "William" and plug it in the <code>SayHello()</code> function. This is a straightforward one and we'll use the value <code>%v</code> in the argument so we'll end up with:</p>
+
+      <div class="code-example">
+        <pre><code>package starter
+
+import "fmt"
+
+func SayHello(name string) string {
+    return fmt.Sprintf("Hello %v. Welcome!", name)
+}</code></pre>
+      </div>
+
+      <p>You can try another name and it should still work as expected when you run <code>go test</code>.</p>
+
+      <div class="code-example">
+        <pre><code>func TestSayHello(t *testing.T) {
+    greeting := starter.SayHello("William")
+    assert.Equal(t, "Hello William. Welcome!", greeting)
+    
+    another_greeting := starter.SayHello("asdf ghjkl")
+    assert.Equal(t, "Hello asdf ghjkl. Welcome!", another_greeting)
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Coverage and Refactoring -->
+    <div class="guide-section">
+      <h2>📊 Coverage and Refactoring in Go Tests</h2>
+      <p>For the next function, we'd like to test and create the function <code>OddOrEven()</code> that accepts an integer and tells if it is an odd or even integer.</p>
+
+      <h3>🔴 Step 1: Write the Test First</h3>
+      <p>Initially, we wanted to check if the function accepts an integer like 45, the function returns the string "45 is an odd number":</p>
+
+      <div class="code-example">
+        <pre><code>func TestOddOrEven(t *testing.T) {
+    assert.Equal(t, "45 is an odd number", starter.OddOrEven(45))
+}</code></pre>
+      </div>
+
+      <h3>🟢 Step 2: Create Function Signature</h3>
+      <p>Like the first function we had, we'll create a function with the same signature in <code>starter.go</code> to remove the syntax error and run the test:</p>
+
+      <div class="code-example">
+        <pre><code>func OddOrEven(num int) string {
+    return ""
+}</code></pre>
+      </div>
+
+      <p>A quick run of <code>go test</code> will provide the error:</p>
+
+      <div class="code-example">
+        <pre><code>--- FAIL: TestOddOrEven (0.00s)
+    starter_test.go:18:
+        	Error Trace:	starter_test.go:18
+        	Error:      	Not equal:
+        	            	expected: "45 is an odd number"
+        	            	actual  : ""</code></pre>
+      </div>
+
+      <h3>🔵 Step 3: Implement Basic Logic</h3>
+      <p>To minimally satisfy the test requirement, we probably can just pass a string "45 is an odd number" but let's make it more dynamic and use the input.</p>
+
+      <div class="code-example">
+        <pre><code>func OddOrEven(num int) string {
+    return fmt.Sprintf("%v is an odd number", num)
+}</code></pre>
+      </div>
+
+      <p>This would make the test pass. But if we have another test item for an even number:</p>
+
+      <div class="code-example">
+        <pre><code>func TestOddOrEven(t *testing.T) {
+    assert.Equal(t, "45 is an odd number", starter.OddOrEven(45))
+    assert.Equal(t, "42 is an even number", starter.OddOrEven(42))
+}</code></pre>
+      </div>
+
+      <p>The test would fail:</p>
+
+      <div class="code-example">
+        <pre><code>--- FAIL: TestOddOrEven (0.00s)
+    starter_test.go:19:
+        	Error Trace:	starter_test.go:19
+        	Error:      	Not equal:
+        	            	expected: "42 is an even number"
+        	            	actual  : "42 is an odd number"</code></pre>
+      </div>
+
+      <h3>🔧 Step 4: Refactor with Proper Logic</h3>
+      <p>We can use existing functions like the modulo <code>math.Mod()</code> and just need a bit of conversion since <code>math.Mod()</code> requires float64 as an input. We can see the following results to a modified function:</p>
+
+      <div class="code-example">
+        <pre><code>func OddOrEven(num int) string {
+    criteria := math.Mod(float64(num), 2)
+    if criteria == 1 {
+        return fmt.Sprintf("%v is an odd number", num)
+    }
+    return fmt.Sprintf("%v is an even number", num)
+}</code></pre>
+      </div>
+
+      <p>It satisfies the previous two items (45 and 42), but can it satisfy 0?</p>
+
+      <div class="code-example">
+        <pre><code>func TestOddOrEven(t *testing.T) {
+    assert.Equal(t, "45 is an odd number", starter.OddOrEven(45))
+    assert.Equal(t, "42 is an even number", starter.OddOrEven(42))
+    assert.Equal(t, "0 is an even number", starter.OddOrEven(0))
+}</code></pre>
+      </div>
+
+      <p>It does! Thinking about the test case, we also have negative values in integers. So, let's try negative numbers this time like -45.</p>
+
+      <div class="code-example">
+        <pre><code>func TestOddOrEven(t *testing.T) {
+    assert.Equal(t, "45 is an odd number", starter.OddOrEven(45))
+    assert.Equal(t, "42 is an even number", starter.OddOrEven(42))
+    assert.Equal(t, "0 is an even number", starter.OddOrEven(0))
+    assert.Equal(t, "-45 is an odd number", starter.OddOrEven(-45))
+}</code></pre>
+      </div>
+
+      <div class="code-example">
+        <pre><code>--- FAIL: TestOddOrEven (0.00s)
+    starter_test.go:21:
+        	Error Trace:	starter_test.go:21
+        	Error:      	Not equal:
+        	            	expected: "-45 is an odd number"
+        	            	actual  : "-45 is an even number"</code></pre>
+      </div>
+
+      <p>Notice that the test failed when we thought we almost had it. For this module, return value is -1 instead of 1. So you can already see some parallelism to real-life use cases that could make your supposedly-very-reliable function to still potentially fail with some edge cases. So, we modified the test to:</p>
+
+      <div class="code-example">
+        <pre><code>func OddOrEven(num int) string {
+    criteria := math.Mod(float64(num), 2)
+    if criteria == 1 || criteria == -1 {
+        return fmt.Sprintf("%v is an odd number", num)
+    }
+    return fmt.Sprintf("%v is an even number", num)
+}</code></pre>
+      </div>
+
+      <p>We'll also test that for a negative even number like -42 and it works.</p>
+    </div>
+
+    <!-- Subtests and Refactoring -->
+    <div class="guide-section">
+      <h2>🔀 Subtests and Refactoring</h2>
+      <p>When we're testing a function, there may be instances where we want to group the test items into meaningful subcategories. For example, for a more complicated function, we may want to have a subtest for the happy path, another subtest for an edge-case and maybe another subtest for error-handling.</p>
+
+      <p>In our example, we may want to create subgroups for non-negative cases and negative cases. Golang still allows us to do these subtests and it's also a good way to reuse input values.</p>
+
+      <div class="code-example">
+        <pre><code>func TestFunc(t *testing.T) {
+    // place common values to all tests
+    t.Run("subtest 1", func(t *testing.T) {
+        // place common values to all subtest 1
+        t.Run("subsubtest a", func(t *testing.T) {
+            // place common values to all subsubtest a
+        })
+        t.Run("subsubtest b", func(t *testing.T) {
+            //
+        })
+    })
+    t.Run("subtest 2", func(t *testing.T) {
+        //
+    })
+}</code></pre>
+      </div>
+
+      <p>This also makes it easier to read the test cases. In our example, we don't have common values that we can refactor for the simple use case, but we can group the test items to easily see that the created function can work for both non-negative and negative integers like so:</p>
+
+      <div class="code-example">
+        <pre><code>func TestOddOrEven(t *testing.T) {
+    t.Run("Check Non Negative Numbers", func(t *testing.T) {
+        assert.Equal(t, "45 is an odd number", starter.OddOrEven(45))
+        assert.Equal(t, "42 is an even number", starter.OddOrEven(42))
+        assert.Equal(t, "0 is an even number", starter.OddOrEven(0))
+    })
+    t.Run("Check Negative Numbers", func(t *testing.T) {
+        assert.Equal(t, "-45 is an odd number", starter.OddOrEven(-45))
+        assert.Equal(t, "-42 is an even number", starter.OddOrEven(-42))
+    })
+}</code></pre>
+      </div>
+
+      <p>It's also easy to understand and see a summary of the test when we run <code>go test -v</code> as they're grouped together.</p>
+
+      <div class="code-example">
+        <pre><code>=== RUN   TestSayHello
+--- PASS: TestSayHello (0.00s)
+=== RUN   TestOddOrEven
+=== RUN   TestOddOrEven/Check_Non_Negative_Numbers
+=== RUN   TestOddOrEven/Check_Negative_Numbers
+--- PASS: TestOddOrEven (0.00s)
+    --- PASS: TestOddOrEven/Check_Non_Negative_Numbers (0.00s)
+    --- PASS: TestOddOrEven/Check_Negative_Numbers (0.00s)</code></pre>
+      </div>
+    </div>
+
+    <!-- Coverage Section -->
+    <div class="guide-section">
+      <h2>📈 Coverage</h2>
+      <p>Speaking of creating a summary for the test, it's also important to ensure that the conditions we mentioned the function that will actually be tested. A coverage to the desired output like <code>coverage.out</code> is simply:</p>
+
+      <div class="code-example">
+        <pre><code>go test -v -coverprofile coverage.out</code></pre>
+      </div>
+
+      <p>We can also create an HTML formatted document by running a command similar to:</p>
+
+      <div class="code-example">
+        <pre><code>go tool cover -html=coverage.out -o coverage.html</code></pre>
+      </div>
+
+      <div style="text-align: center; margin: 20px 0;">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-TUBJdNRuf2buFl95FPU8LaosqdCk2K.png" alt="Go Test Coverage Report showing 100% coverage" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+        <p style="font-style: italic; color: #6b7280; margin-top: 8px;">Coverage report showing 100% test coverage with green highlighting</p>
+      </div>
+
+      <p>Currently, we have <strong>100% coverage!</strong></p>
+
+      <p>Suppose that we did not check the even integers and only checked the odd integers, we may only get a coverage of 80% (if we include the <code>SayHello()</code> testing).</p>
+
+      <p>Just note that a line coverage of 100% does not automatically mean there are no additional tests needed. If we removed all the negative subtests, the coverage would still show 100% coverage but we have not tested the case when <code>math.Mod(float64(num), 2) == -1</code>. So yes, a 100% coverage is definitely a good goal but there's more to line coverage that we'll need.</p>
+
+      <div class="prompt-card" style="background-color: #e1f5fe; border-left: 4px solid #2196f3;">
+        <h3>💡 TDD Coverage Advantage</h3>
+        <p>Because we have followed the TDD approach, coverage will not be much of an issue for us! We are making sure that we are "covering" all the processes in our function since we created the tests first even before proceeding to create the function. We're building the function incrementally while achieving almost 100% coverage in each step. Even during the times where we partially created the test, we have almost 100% coverage! Who wouldn't want that, right? This is just one of the ways that we can benefit from TDD. Oh, and I also like that the tests using the TDD approach create a handy and automatically updated documentation for that package/module.</p>
+      </div>
+    </div>
+
+    <!-- Advanced Testing Modules -->
+    <div class="guide-section">
+      <h2>🚀 Advanced Testing Modules</h2>
+      <p>For the third function in <code>starter.go</code>, I intentionally did not follow the TDD approach as my main purpose here is to demonstrate how we can leverage advanced testing modules.</p>
+
+      <p>Now for example, we just wanted to quickly create a health check if a page could be loaded. For us to easily accomplish this task, we can make use of the <code>http</code> package in golang with <code>import "net/http"</code>. We can simply create a health check like:</p>
+
+      <div class="code-example">
+        <pre><code>package starter
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func CheckHealth(writer http.ResponseWriter, req *http.Request) {
+    fmt.Fprintf(writer, "health check passed")
+}</code></pre>
+      </div>
+
+      <p>Now, how do we plan to check this HTTP call? We can leverage the included testing library using <code>import "net/http/httptest"</code>. It's not just important to do the line coverage here but to simulate the HTTP behavior. We can create our mock writer and request using <code>httptest.NewRequest()</code> and <code>httptest.NewRecorder()</code>. And after running our <code>CheckHealth()</code> function, we should expect that the body contains the "health check passed" like what has been written in the <code>CheckHealth()</code> function.</p>
+
+      <div class="code-example">
+        <pre><code>func TestCheckHealth(t *testing.T) {
+    t.Run("Check health status", func(t *testing.T) {
+        req := httptest.NewRequest("GET", "http://mysite.com/example", nil)
+        writer := httptest.NewRecorder()
+        starter.CheckHealth(writer, req)
+        response := writer.Result()
+        body, _ := io.ReadAll(response.Body)
+        
+        assert.Equal(t, "health check passed", string(body))
+    })
+}</code></pre>
+      </div>
+
+      <p>With the test module <code>httptest</code>, additional relevant tests can be added. For example, we can check the <code>io.ReadAll()</code> function does not cause any error returning a nil value and that the status code is 200 (OK). More information on the error handling approach and advanced mocking will be demonstrated in a later article.</p>
+
+      <div class="code-example">
+        <pre><code>func TestCheckHealth(t *testing.T) {
+    t.Run("Check health status", func(t *testing.T) {
+        req := httptest.NewRequest("GET", "http://mysite.com/example", nil)
+        writer := httptest.NewRecorder()
+        starter.CheckHealth(writer, req)
+        response := writer.Result()
+        body, err := io.ReadAll(response.Body)
+        
+        assert.Equal(t, "health check passed", string(body))
+        assert.Equal(t, 200, response.StatusCode)
+        assert.Equal(t,
+            "text/plain; charset=utf-8",
+            response.Header.Get("Content-Type"))
+        assert.Equal(t, nil, err)
+    })
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="guide-section">
+      <h2>📝 Summary</h2>
+      <p>I hope that gave an overview of the basics of golang testing with some elements of the test-driven approach. With that, I am just listing here a quick rundown on what we've covered:</p>
+
+      <ul>
+        <li>Generating automated test</li>
+        <li>Using test coverage</li>
+        <li>Using TDD elements with golang</li>
+        <li>Using specialized test packages like testify and net/http/httptest</li>
+      </ul>
+
+      <p><strong>Working module for the starter tests and functions:</strong> <a href="https://github.com/williaminfante/go_test_starter" target="_blank">https://github.com/williaminfante/go_test_starter</a></p>
+    </div>
+
+    <!-- Final Code Examples -->
+    <div class="guide-section">
+      <h2>📄 Final Code Examples</h2>
+      
+      <h3>starter.go</h3>
+      <div class="code-example">
+        <pre><code>package starter
+
+import (
+    "fmt"
+    "math"
+    "net/http"
+)
+
+func SayHello(name string) string {
+    return fmt.Sprintf("Hello %v. Welcome!", name)
+}
+
+func OddOrEven(num int) string {
+    criteria := math.Mod(float64(num), 2)
+    if criteria == 1 || criteria == -1 {
+        return fmt.Sprintf("%v is an odd number", num)
+    }
+    return fmt.Sprintf("%v is an even number", num)
+}
+
+func CheckHealth(writer http.ResponseWriter, req *http.Request) {
+    fmt.Fprintf(writer, "health check passed")
+}</code></pre>
+      </div>
+
+      <h3>starter_test.go</h3>
+      <div class="code-example">
+        <pre><code>package starter_test
+
+import (
+    "io"
+    "net/http/httptest"
+    "testing"
+    
+    "github.com/stretchr/testify/assert"
+    starter "github.com/williaminfante/go_test_starter"
+)
+
+func TestSayHello(t *testing.T) {
+    greeting := starter.SayHello("William")
+    assert.Equal(t, "Hello William. Welcome!", greeting)
+    
+    another_greeting := starter.SayHello("asdf ghjkl")
+    assert.Equal(t, "Hello asdf ghjkl. Welcome!", another_greeting)
+}
+
+func TestOddOrEven(t *testing.T) {
+    t.Run("Check Non Negative Numbers", func(t *testing.T) {
+        assert.Equal(t, "45 is an odd number", starter.OddOrEven(45))
+        assert.Equal(t, "42 is an even number", starter.OddOrEven(42))
+        assert.Equal(t, "0 is an even number", starter.OddOrEven(0))
+    })
+    t.Run("Check Negative Numbers", func(t *testing.T) {
+        assert.Equal(t, "-45 is an odd number", starter.OddOrEven(-45))
+        assert.Equal(t, "-42 is an even number", starter.OddOrEven(-42))
+    })
+}
+
+func TestCheckHealth(t *testing.T) {
+    t.Run("Check health status", func(t *testing.T) {
+        req := httptest.NewRequest("GET", "http://mysite.com/example", nil)
+        writer := httptest.NewRecorder()
+        starter.CheckHealth(writer, req)
+        response := writer.Result()
+        body, err := io.ReadAll(response.Body)
+        
+        assert.Equal(t, "health check passed", string(body))
+        assert.Equal(t, 200, response.StatusCode)
+        assert.Equal(t,
+            "text/plain; charset=utf-8",
+            response.Header.Get("Content-Type"))
+        assert.Equal(t, nil, err)
+    })
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Original Best Practices -->
+    <div class="guide-section">
+      <h2>🎯 Go Testing Best Practices</h2>
+      
+      <div class="guide-section">
+        <h3>1. Test File Naming</h3>
+        <div class="code-example">
+          <pre><code>// For file: calculator.go
+// Test file: calculator_test.go</code></pre>
+        </div>
+        <p>Test files should end with <code>_test.go</code> and be in the same package.</p>
+      </div>
+
+      <div class="guide-section">
+        <h3>2. Test Function Naming</h3>
+        <div class="code-example">
+          <pre><code>func TestAdd(t *testing.T) { ... }
 func TestAdd_WithNegativeNumbers(t *testing.T) { ... }
 func TestAdd_ShouldReturnError_WhenInputIsInvalid(t *testing.T) { ... }</code></pre>
+        </div>
+        <p>Use descriptive names that explain what is being tested.</p>
       </div>
-      <p>Use descriptive names that explain what is being tested.</p>
-    </div>
 
-    <div class="guide-section">
-      <h2>3. Table-Driven Tests</h2>
-      <div class="code-example">
-        <pre><code>func TestAdd(t *testing.T) {
+      <div class="guide-section">
+        <h3>3. Table-Driven Tests</h3>
+        <div class="code-example">
+          <pre><code>func TestAdd(t *testing.T) {
     tests := []struct {
         name     string
         a, b     int
@@ -66,42 +633,43 @@ func TestAdd_ShouldReturnError_WhenInputIsInvalid(t *testing.T) { ... }</code></
         })
     }
 }</code></pre>
+        </div>
       </div>
-    </div>
 
-    <div class="guide-section">
-      <h2>4. Error Testing</h2>
-      <div class="code-example">
-        <pre><code>func TestDivide_ShouldReturnError_WhenDivideByZero(t *testing.T) {
+      <div class="guide-section">
+        <h3>4. Error Testing</h3>
+        <div class="code-example">
+          <pre><code>func TestDivide_ShouldReturnError_WhenDivideByZero(t *testing.T) {
     _, err := Divide(10, 0)
     if err == nil {
         t.Error("Expected error when dividing by zero")
     }
 }</code></pre>
+        </div>
       </div>
-    </div>
 
-    <div class="guide-section">
-      <h2>5. Benchmarking</h2>
-      <div class="code-example">
-        <pre><code>func BenchmarkAdd(b *testing.B) {
+      <div class="guide-section">
+        <h3>5. Benchmarking</h3>
+        <div class="code-example">
+          <pre><code>func BenchmarkAdd(b *testing.B) {
     for i := 0; i < b.N; i++ {
         Add(1, 2)
     }
 }</code></pre>
+        </div>
+        <p>Run with: <code>go test -bench=.</code></p>
       </div>
-      <p>Run with: <code>go test -bench=.</code></p>
-    </div>
 
-    <div class="guide-section">
-      <h2>6. Test Coverage</h2>
-      <div class="code-example">
-        <pre><code># Generate coverage report
+      <div class="guide-section">
+        <h3>6. Test Coverage</h3>
+        <div class="code-example">
+          <pre><code># Generate coverage report
 go test -cover
 
 # Generate detailed HTML coverage report
 go test -coverprofile=coverage.out
 go tool cover -html=coverage.out</code></pre>
+        </div>
       </div>
     </div>
 
@@ -110,6 +678,7 @@ go tool cover -html=coverage.out</code></pre>
     </button>
   </div>
 
+  <script src="sidebar-toggle.js"></script>
   <script src="quick-actions.js"></script>
 </body>
 </html>
