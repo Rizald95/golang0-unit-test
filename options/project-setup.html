@@ -7,26 +7,317 @@
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+      ◀
+    </button>
+    
     <h2>Settings</h2>
     <ul class="nav">
-      <li><a href="profile.html">👤 Profile</a></li>
-      <li><a href="chatHistory.html">🕑 Chat History</a></li>
-      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
-      <li><a href="generate-tests.html">📝 Generate Tests</a></li>
-      <li><a href="testing-guide.html">📚 Testing Guide</a></li>
-      <li><a href="project-setup.html" class="active">🏗️ Project Setup</a></li>
+      <li>
+        <a href="profile.html" title="Profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="chatHistory.html" title="Chat History">
+          <span class="nav-icon">🕑</span>
+          <span class="nav-text">Chat History</span>
+        </a>
+      </li>
+      <li>
+        <a href="modelBenchmark.html" title="Benchmark">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Benchmark</span>
+        </a>
+      </li>
+      <li>
+        <a href="generate-tests.html" title="Generate Tests">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Generate Tests</span>
+        </a>
+      </li>
+      <li>
+        <a href="testing-guide.html" title="Testing Guide">
+          <span class="nav-icon">📚</span>
+          <span class="nav-text">Testing Guide</span>
+        </a>
+      </li>
+      <li>
+        <a href="project-setup.html" class="active" title="Project Setup">
+          <span class="nav-icon">🏗️</span>
+          <span class="nav-text">Project Setup</span>
+        </a>
+      </li>
     </ul>
   </div>
 
-  <div class="content">
-    <h1>🏗️ Go Project Structure</h1>
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="content" id="content">
+  <h1>🏗️ User Guide - Golang Unit Test Generator</h1>
+  <p>Complete guide for installing, configuring, and using the Golang Unit Test Generator Chrome extension.</p>
+  
+  <!-- Installation Section -->
+  <div class="guide-section">
+    <h2>🧩 1. Installation and Extension Access</h2>
+    
+    <h3>Step 1: Enable Developer Mode</h3>
+    <p>Open Chrome and make sure you have enabled <strong>Developer Mode</strong>.</p>
+    
+    <div style="text-align: center; margin: 20px 0;">
+      <img src="../assets/pictures/manage.png" alt="Chrome Extensions Management" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+      <p style="font-style: italic; color: #6b7280; margin-top: 8px;">Chrome Extensions Management Page</p>
+    </div>
+    
+    <h3>Step 2: Load Extension</h3>
+    <ol>
+      <li>Go to: <code>chrome://extensions/</code></li>
+      <li>Click <strong>Load unpacked</strong> button → point to your extension folder (containing manifest.json, popup.html, etc.)</li>
+    </ol>
+    
+    <div style="text-align: center; margin: 20px 0;">
+      <img src="../assets/pictures/unpackedEkstension.png" alt="Load Unpacked Extension" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+      <p style="font-style: italic; color: #6b7280; margin-top: 8px;">Loading unpacked extension</p>
+    </div>
+    
+    <h3>Step 3: Verify Installation</h3>
+    <p>After successful installation, the extension icon will appear in the extension bar (top right of browser).</p>
+    
+    <div style="text-align: center; margin: 20px 0;">
+      <img src="../assets/pictures/openExtension.png" alt="Extension Icon" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+      <p style="font-style: italic; color: #6b7280; margin-top: 8px;">Extension icon in Chrome toolbar</p>
+    </div>
+  </div>
+
+  <!-- Opening Extension Section -->
+  <div class="guide-section">
+    <h2>🪄 2. Opening the Extension</h2>
+    
+    <ul>
+      <li>Click the <strong>Golang Unit Test Generator</strong> icon to open the side panel (right side panel).</li>
+      <li>If the side panel doesn't automatically appear, make sure you have enabled <code>sidePanel</code> permissions in manifest.json.</li>
+    </ul>
+    
+    <div style="text-align: center; margin: 20px 0;">
+      <img src="../assets/pictures/sidePanel.png" alt="Side Panel View" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+      <p style="font-style: italic; color: #6b7280; margin-top: 8px;">Extension side panel interface</p>
+    </div>
+  </div>
+
+  <!-- Initial Interface Section -->
+  <div class="guide-section">
+    <h2>💻 3. Initial Interface</h2>
+    
+    <p>When the side panel opens, you will see:</p>
+    
+    <div class="prompt-examples">
+      <div class="prompt-card">
+        <h3>👋 Welcome Message</h3>
+        <p><strong>Hi Programmer</strong> greeting with quick action buttons</p>
+      </div>
+      <div class="prompt-card">
+        <h3>🎯 Main Buttons</h3>
+        <p><strong>Generate Tests</strong> → to generate unit tests<br>
+        <strong>Testing Guide</strong> → guide for running tests in Go<br>
+        <strong>Project Setup</strong> → Go project structure explanation</p>
+      </div>
+      <div class="prompt-card">
+        <h3>🤖 Model Selection</h3>
+        <p><strong>Choose Model</strong> dropdown to select AI model (Mistral, Gemma, DeepSeek, etc.)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Code Section -->
+  <div class="guide-section">
+    <h2>📂 4. Uploading or Inputting Go Code</h2>
+    
+    <h3>Method 1: File Upload</h3>
+    <ol>
+      <li>Click the <strong>📁</strong> (upload icon) button in the input area</li>
+      <li>Upload a <code>.go</code> file from your local system</li>
+    </ol>
+    
+    <h3>Method 2: Direct Input</h3>
+    <ol>
+      <li>Copy your Go code directly</li>
+      <li>Paste it into the text input box</li>
+    </ol>
+    
+    <div class="code-example">
+      <pre><code>// Example Go function to test
+package main
+
+import "fmt"
+
+func Add(a, b int) int {
+    return a + b
+}
+
+func main() {
+    fmt.Println(Add(2, 3))
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- Generate Tests Section -->
+  <div class="guide-section">
+    <h2>🤖 5. Generating Unit Tests</h2>
+    
+    <h3>Step-by-step Process:</h3>
+    <ol>
+      <li><strong>Input Code:</strong> After entering your code (via upload or direct input)</li>
+      <li><strong>Select Model:</strong> Choose appropriate AI model from dropdown</li>
+      <li><strong>Send Request:</strong> Click the <strong>➤</strong> button to send prompt to the model</li>
+      <li><strong>Wait for Response:</strong> Wait for the model to generate unit test output</li>
+      <li><strong>Copy/Download:</strong> Use <strong>📋</strong> (copy) or <strong>💾</strong> (download) icons to save results</li>
+    </ol>
+    
+    <div class="prompt-card" style="background-color: #e8f5e8; border-left: 4px solid #4caf50;">
+      <h3>💡 Pro Tip</h3>
+      <p>Use specific prompts like: <em>"Generate comprehensive unit tests with table-driven tests and edge cases for this Go function"</em></p>
+    </div>
+  </div>
+
+  <!-- Additional Menu Section -->
+  <div class="guide-section">
+    <h2>⚙️ 6. Accessing Additional Menus</h2>
+    
+    <p>Click the <strong>☰</strong> (hamburger menu) icon in the top right to open Dashboard Options, containing:</p>
+    
+    <div class="prompt-examples">
+      <div class="prompt-card">
+        <h3>👤 Profile</h3>
+        <p>Manage username and personal settings</p>
+      </div>
+      <div class="prompt-card">
+        <h3>🕑 Chat History</h3>
+        <p>View previous conversations and interactions</p>
+      </div>
+      <div class="prompt-card">
+        <h3>📊 Benchmark</h3>
+        <p>Compare performance output between different models</p>
+      </div>
+      <div class="prompt-card">
+        <h3>📝 Generate Tests</h3>
+        <p>Automatic TDD guide and test generation</p>
+      </div>
+      <div class="prompt-card">
+        <h3>📚 Testing Guide</h3>
+        <p>Unit testing explanation with Go and TDD approach</p>
+      </div>
+      <div class="prompt-card">
+        <h3>🏗️ Project Setup</h3>
+        <p>Recommended Go directory structure</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="guide-section">
+    <h2>📝 Tips for Best Results</h2>
+    
+    <ul>
+      <li><strong>File Format:</strong> Make sure your Go file is not empty and has <code>.go</code> extension</li>
+      <li><strong>Model Selection:</strong> Choose the right AI model for your needs (example: <code>deepseek-r1</code> for strong reasoning)</li>
+      <li><strong>Custom Prompts:</strong> Try custom prompts to test model flexibility</li>
+      <li><strong>Code Quality:</strong> Use clean and functional Go code for best results</li>
+      <li><strong>Specific Requests:</strong> Be specific about what type of tests you want (unit tests, integration tests, benchmarks, etc.)</li>
+    </ul>
+    
+    <div class="code-example">
+      <pre><code>// Example of good prompt:
+"Generate comprehensive unit tests for this Go function including:
+- Table-driven tests
+- Edge cases and error handling
+- Benchmark tests
+- Mock dependencies if needed"</code></pre>
+    </div>
+  </div>
+
+  <!-- Troubleshooting Section -->
+  <div class="guide-section">
+    <h2>🛠 Troubleshooting</h2>
+    
+    <div class="prompt-examples">
+      <div class="prompt-card">
+        <h3>🔁 No Response</h3>
+        <p>If the extension doesn't respond, try refreshing or reopening the extension</p>
+      </div>
+      <div class="prompt-card">
+        <h3>❌ Wrong File Format</h3>
+        <p>If file format is incorrect, the system will show a warning message</p>
+      </div>
+      <div class="prompt-card">
+        <h3>🧪 Best Results</h3>
+        <p>For optimal results, use clean and functional Go code</p>
+      </div>
+      <div class="prompt-card">
+        <h3>🔌 Connection Issues</h3>
+        <p>Check your internet connection and API key configuration</p>
+      </div>
+      <div class="prompt-card">
+        <h3>⚡ Performance</h3>
+        <p>Large files may take longer to process - consider breaking them into smaller functions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Recommendations -->
+  <div class="guide-section">
+    <h2>🤖 AI Model Recommendations</h2>
+    
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <thead>
+          <tr style="background-color: #f8f9fa;">
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Model</th>
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Best For</th>
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Speed</th>
+            <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Quality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>deepseek-r1-distill-llama-70b</strong></td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">Complex reasoning, comprehensive tests</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐⭐⭐</td>
+          </tr>
+          <tr style="background-color: #f8f9fa;">
+            <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>llama-3.3-70b-versatile</strong></td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">General purpose, balanced performance</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐⭐</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐⭐</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>mistral-saba-24b</strong></td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">Quick tests, simple functions</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐⭐⭐</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐</td>
+          </tr>
+          <tr style="background-color: #f8f9fa;">
+            <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>gemma2-9b-it</strong></td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">Lightweight, basic testing</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐⭐⭐</td>
+            <td style="border: 1px solid #dee2e6; padding: 12px;">⭐⭐⭐</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ORIGINAL PROJECT SETUP CONTENT STARTS HERE -->
+  <div class="structure-section">
+    <h1>🏗️ Go Project Structure Guide</h1>
     <p>Learn how to organize your Go projects for maximum efficiency and maintainability.</p>
     
-    <div class="structure-section">
-      <h2>Standard Go Project Layout</h2>
-      <div class="file-tree">
-        <pre>
+    <h2>Standard Go Project Layout</h2>
+    <div class="file-tree">
+      <pre>
 myproject/
 ├── cmd/
 │   └── myapp/
@@ -53,42 +344,42 @@ myproject/
 ├── go.sum
 ├── Makefile
 └── README.md
-        </pre>
-      </div>
+      </pre>
     </div>
+  </div>
 
-    <div class="structure-section">
-      <h2>Directory Explanations</h2>
-      <div class="dir-explanation">
-        <h3>📁 cmd/</h3>
-        <p>Main applications for this project. The directory name should match the name of the executable.</p>
-      </div>
-      
-      <div class="dir-explanation">
-        <h3>📁 internal/</h3>
-        <p>Private application and library code. This is the code you don't want others importing.</p>
-      </div>
-      
-      <div class="dir-explanation">
-        <h3>📁 pkg/</h3>
-        <p>Library code that's ok to use by external applications.</p>
-      </div>
-      
-      <div class="dir-explanation">
-        <h3>📁 api/</h3>
-        <p>OpenAPI/Swagger specs, JSON schema files, protocol definition files.</p>
-      </div>
-      
-      <div class="dir-explanation">
-        <h3>📁 web/</h3>
-        <p>Web application specific components: static web assets, server side templates.</p>
-      </div>
+  <div class="structure-section">
+    <h2>Directory Explanations</h2>
+    <div class="dir-explanation">
+      <h3>📁 cmd/</h3>
+      <p>Main applications for this project. The directory name should match the name of the executable.</p>
     </div>
+    
+    <div class="dir-explanation">
+      <h3>📁 internal/</h3>
+      <p>Private application and library code. This is the code you don't want others importing.</p>
+    </div>
+    
+    <div class="dir-explanation">
+      <h3>📁 pkg/</h3>
+      <p>Library code that's ok to use by external applications.</p>
+    </div>
+    
+    <div class="dir-explanation">
+      <h3>📁 api/</h3>
+      <p>OpenAPI/Swagger specs, JSON schema files, protocol definition files.</p>
+    </div>
+    
+    <div class="dir-explanation">
+      <h3>📁 web/</h3>
+      <p>Web application specific components: static web assets, server side templates.</p>
+    </div>
+  </div>
 
-    <div class="structure-section">
-      <h2>Initialize New Project</h2>
-      <div class="code-example">
-        <pre><code># Create new directory
+  <div class="structure-section">
+    <h2>Initialize New Project</h2>
+    <div class="code-example">
+      <pre><code># Create new directory
 mkdir myproject && cd myproject
 
 # Initialize Go module
@@ -110,13 +401,13 @@ EOF
 
 # Create go.mod if not exists
 go mod tidy</code></pre>
-      </div>
     </div>
+  </div>
 
-    <div class="structure-section">
-      <h2>Testing Structure</h2>
-      <div class="code-example">
-        <pre><code># Run all tests
+  <div class="structure-section">
+    <h2>Testing Structure</h2>
+    <div class="code-example">
+      <pre><code># Run all tests
 go test ./...
 
 # Run tests with coverage
@@ -127,13 +418,13 @@ go test ./internal/handler
 
 # Run specific test
 go test -run TestHandlerCreate ./internal/handler</code></pre>
-      </div>
     </div>
+  </div>
 
-    <div class="structure-section">
-      <h2>Makefile Example</h2>
-      <div class="code-example">
-        <pre><code>.PHONY: build test clean run
+  <div class="structure-section">
+    <h2>Makefile Example</h2>
+    <div class="code-example">
+      <pre><code>.PHONY: build test clean run
 
 build:
 	go build -o bin/myapp cmd/myapp/main.go
@@ -154,14 +445,15 @@ run:
 deps:
 	go mod download
 	go mod tidy</code></pre>
-      </div>
     </div>
-
-    <button class="action-button" id="create-structure">
-      🚀 Create Project Structure
-    </button>
   </div>
 
+  <button class="action-button" id="create-structure">
+    🚀 Start Using Extension
+  </button>
+</div>
+
+  <script src="sidebar-toggle.js"></script>
   <script src="quick-actions.js"></script>
 </body>
 </html>
