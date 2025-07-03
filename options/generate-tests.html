@@ -7,19 +7,56 @@
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+      ◀
+    </button>
+    
     <h2>Settings</h2>
     <ul class="nav">
-      <li><a href="profile.html">👤 Profile</a></li>
-      <li><a href="chatHistory.html">🕑 Chat History</a></li>
-      <li><a href="modelBenchmark.html">📊 Benchmark</a></li>
-      <li><a href="generate-tests.html" class="active">📝 Generate Tests</a></li>
-      <li><a href="testing-guide.html">📚 Testing Guide</a></li>
-      <li><a href="project-setup.html">🏗️ Project Setup</a></li>
+      <li>
+        <a href="profile.html" title="Profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="chatHistory.html" title="Chat History">
+          <span class="nav-icon">🕑</span>
+          <span class="nav-text">Chat History</span>
+        </a>
+      </li>
+      <li>
+        <a href="modelBenchmark.html" title="Benchmark">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Benchmark</span>
+        </a>
+      </li>
+      <li>
+        <a href="generate-tests.html" class="active" title="Generate Tests">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">Generate Tests</span>
+        </a>
+      </li>
+      <li>
+        <a href="testing-guide.html" title="Testing Guide">
+          <span class="nav-icon">📚</span>
+          <span class="nav-text">Testing Guide</span>
+        </a>
+      </li>
+      <li>
+        <a href="project-setup.html" title="Project Setup">
+          <span class="nav-icon">🏗️</span>
+          <span class="nav-text">Project Setup</span>
+        </a>
+      </li>
     </ul>
   </div>
 
-  <div class="content">
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="content" id="content">
     <h1>📝 Generate Unit Tests</h1>
     <p>Create comprehensive unit tests for your Go functions automatically.</p>
     
@@ -51,6 +88,365 @@
       </div>
     </div>
 
+    <!-- ✅ NEW COMPREHENSIVE UNIT TESTING GUIDE -->
+    <div class="guide-section">
+      <h1>📚 Comprehensive Unit Testing Guide for Go</h1>
+      <p>This guide is designed to provide an in-depth understanding of creating unit tests in the Go programming language, including standard practices and advanced features such as table-driven tests, coverage, benchmarks, and documentation with code examples. To follow this guide, you need to understand the basics of the Go language. It is recommended to use Go version 1.11 and above as this guide uses the Go Modules package management system.</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="guide-section">
+      <h2>Step 1 — Creating a Simple Program to Test</h2>
+      <p>First, you need to have program code that will be tested. For example, create a <code>math</code> folder, then create a <code>math.go</code> file containing two functions <code>Add</code> and <code>Subtract</code> to add and subtract two numbers:</p>
+      
+      <div class="code-example">
+        <pre><code>package math
+
+func Add(x, y int) int {
+    return x + y
+}
+
+func Subtract(x, y int) int {
+    return x - y
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="guide-section">
+      <h2>Step 2 — Writing Basic Unit Tests</h2>
+      <p>Unit test files must be suffixed with <code>_test.go</code>, for example <code>math_test.go</code>. Each test function starts with <code>Test</code> and receives a parameter <code>t *testing.T</code> from the <code>testing</code> package.</p>
+      
+      <div class="code-example">
+        <pre><code>package math
+
+import "testing"
+
+func TestAdd(t *testing.T) {
+    got := Add(4, 6)
+    want := 10
+    
+    if got != want {
+        t.Errorf("got %d, want %d", got, want)
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="guide-section">
+      <h2>Step 3 — Running Unit Tests</h2>
+      <p>Use the following command to run tests:</p>
+      
+      <div class="code-example">
+        <pre><code>go test</code></pre>
+      </div>
+      
+      <p>Use the <code>-v</code> flag to get more detailed output:</p>
+      
+      <div class="code-example">
+        <pre><code>go test -v</code></pre>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="guide-section">
+      <h2>Step 4 — Table-Driven Tests</h2>
+      <p>Use the table-driven approach to test multiple scenarios at once:</p>
+      
+      <div class="code-example">
+        <pre><code>type addTest struct {
+    arg1, arg2, expected int
+}
+
+var addTests = []addTest{
+    {2, 3, 5},
+    {4, 8, 12},
+    {6, 9, 15},
+}
+
+func TestAdd(t *testing.T) {
+    for _, test := range addTests {
+        if got := Add(test.arg1, test.arg2); got != test.expected {
+            t.Errorf("got %d, want %d", got, test.expected)
+        }
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="guide-section">
+      <h2>Step 5 — Coverage Testing</h2>
+      <p>To check test coverage against code:</p>
+      
+      <div class="code-example">
+        <pre><code>go test -coverprofile=coverage.out
+go tool cover -html=coverage.out</code></pre>
+      </div>
+      
+      <p>Green text indicates parts of the code that have been tested, while red indicates parts that have not been tested.</p>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="guide-section">
+      <h2>Step 6 — Benchmark Testing</h2>
+      <p>Benchmarks are used to measure performance:</p>
+      
+      <div class="code-example">
+        <pre><code>func BenchmarkAdd(b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        Add(4, 6)
+    }
+}</code></pre>
+      </div>
+      
+      <p>Run with:</p>
+      
+      <div class="code-example">
+        <pre><code>go test -bench=.</code></pre>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="guide-section">
+      <h2>Step 7 — Example Documentation</h2>
+      <p>Go also supports writing examples in test files for documentation as well as testing:</p>
+      
+      <div class="code-example">
+        <pre><code>func ExampleAdd() {
+    fmt.Println(Add(4, 6))
+    // Output: 10
+}</code></pre>
+      </div>
+      
+      <p>Run with:</p>
+      
+      <div class="code-example">
+        <pre><code>go test -v</code></pre>
+      </div>
+    </div>
+
+    <!-- Alternative Libraries -->
+    <div class="guide-section">
+      <h2>🔧 Alternative Testing Libraries for Go</h2>
+      <p>In addition to the built-in <code>testing</code> package, you can also consider the following third-party libraries to extend testing capabilities:</p>
+      
+      <div class="prompt-examples">
+        <div class="prompt-card">
+          <h3>Testify</h3>
+          <p><strong>URL:</strong> https://github.com/stretchr/testify</p>
+          <p>Provides more expressive assertions (assert, require), mocking, and suite testing.</p>
+        </div>
+        
+        <div class="prompt-card">
+          <h3>Ginkgo & Gomega</h3>
+          <p><strong>URL:</strong> https://onsi.github.io/ginkgo</p>
+          <p>BDD (Behavior-Driven Development) framework for Go, perfect for large-scale testing.</p>
+        </div>
+        
+        <div class="prompt-card">
+          <h3>GoMock</h3>
+          <p><strong>URL:</strong> https://github.com/golang/mock</p>
+          <p>Official mocking framework from the Go team, for creating complex interface mocks.</p>
+        </div>
+        
+        <div class="prompt-card">
+          <h3>GoConvey</h3>
+          <p><strong>URL:</strong> https://github.com/smartystreets/goconvey</p>
+          <p>Provides an interactive web UI for viewing test results and assertions.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ NEW GOMOCK SECTION -->
+    <div class="guide-section">
+      <h1>🧪 Unit Testing Using GoMock</h1>
+      
+      <h2>📌 What is GoMock?</h2>
+      <p>GoMock is the official mocking framework for the Go language developed by the Go team. GoMock allows you to create mocks from interfaces for unit testing, without having to manually create dummy implementations.</p>
+      
+      <p><strong>Mocks are very useful when:</strong></p>
+      <ul>
+        <li>You want to test functions without actually calling databases or external APIs</li>
+        <li>You want to verify that certain functions are called with certain parameters</li>
+      </ul>
+    </div>
+
+    <!-- GoMock Installation -->
+    <div class="guide-section">
+      <h2>📦 GoMock Installation</h2>
+      
+      <h3>1. Install mockgen (mock generator tool)</h3>
+      <div class="code-example">
+        <pre><code>go install go.uber.org/mock/mockgen@latest</code></pre>
+      </div>
+      <p>Make sure the <code>$GOPATH/bin</code> directory is in the PATH environment variable so that mockgen can be used from the terminal.</p>
+      
+      <h3>2. Add GoMock to your go.mod</h3>
+      <div class="code-example">
+        <pre><code>go get go.uber.org/mock/gomock</code></pre>
+      </div>
+    </div>
+
+    <!-- GoMock Case Study -->
+    <div class="guide-section">
+      <h2>🧪 Case Study: Service Unit Test with GoMock</h2>
+      
+      <h3>🧱 Project Structure</h3>
+      <div class="code-example">
+        <pre><code>/example
+│
+├── main.go
+├── service/
+│   ├── service.go
+│   └── service_test.go
+├── mock/
+│   └── mock_db.go (generated by mockgen)
+└── go.mod</code></pre>
+      </div>
+    </div>
+
+    <!-- Interface to Mock -->
+    <div class="guide-section">
+      <h3>1. Interface to be Mocked</h3>
+      <p><strong>File:</strong> service/service.go</p>
+      
+      <div class="code-example">
+        <pre><code>package service
+
+type Database interface {
+    Save(data string) error
+}
+
+type Service struct {
+    DB Database
+}
+
+func (s *Service) Submit(data string) error {
+    if data == "" {
+        return nil
+    }
+    return s.DB.Save(data)
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Generate Mock -->
+    <div class="guide-section">
+      <h3>2. Generate Mock from Interface</h3>
+      <p>Run the following command to generate a mock file from the Database interface:</p>
+      
+      <div class="code-example">
+        <pre><code>mockgen -source=service/service.go -destination=mock/mock_db.go -package=mock</code></pre>
+      </div>
+      
+      <p>mockgen will generate a mock that can be used directly in tests.</p>
+    </div>
+
+    <!-- Unit Test with Mock -->
+    <div class="guide-section">
+      <h3>3. Writing Unit Tests Using Mock</h3>
+      <p><strong>File:</strong> service/service_test.go</p>
+      
+      <div class="code-example">
+        <pre><code>package service_test
+
+import (
+    "errors"
+    "testing"
+    
+    "github.com/golang/mock/gomock"
+    "your-module-path/mock"
+    "your-module-path/service"
+)
+
+func TestSubmit(t *testing.T) {
+    ctrl := gomock.NewController(t)
+    defer ctrl.Finish()
+    
+    mockDB := mock.NewMockDatabase(ctrl)
+    
+    // CASE 1: Empty data, should not call DB
+    s := &service.Service{DB: mockDB}
+    err := s.Submit("")
+    if err != nil {
+        t.Errorf("Expected nil, got %v", err)
+    }
+    
+    // CASE 2: Valid data, Save called once
+    mockDB.EXPECT().Save("hello").Return(nil)
+    
+    err = s.Submit("hello")
+    if err != nil {
+        t.Errorf("Expected nil, got %v", err)
+    }
+    
+    // CASE 3: Simulate DB error
+    mockDB.EXPECT().Save("fail").Return(errors.New("DB Error"))
+    
+    err = s.Submit("fail")
+    if err == nil {
+        t.Errorf("Expected error, got nil")
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Test Explanation -->
+    <div class="guide-section">
+      <h2>🔍 Test Explanation</h2>
+      <ul>
+        <li><strong>gomock.NewController(t):</strong> Controls the mock lifecycle. <code>defer ctrl.Finish()</code> is mandatory for expectation validation.</li>
+        <li><strong>mockDB.EXPECT().Save(...):</strong> Specifies that the Save function is expected to be called with certain parameters and return certain values.</li>
+        <li><strong>mockDB will not be called</strong> if data is empty (test branch without interaction).</li>
+      </ul>
+    </div>
+
+    <!-- Tips and Best Practices -->
+    <div class="guide-section">
+      <h2>🔧 Tips and Best Practices</h2>
+      
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background-color: #f8f9fa;">
+              <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Tips</th>
+              <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Explanation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>Use subtests (t.Run)</strong></td>
+              <td style="border: 1px solid #dee2e6; padding: 12px;">To test many scenarios clearly and separately</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>Use gomock.InOrder()</strong></td>
+              <td style="border: 1px solid #dee2e6; padding: 12px;">To verify the order of function calls</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>Validate interactions</strong></td>
+              <td style="border: 1px solid #dee2e6; padding: 12px;">Use .Times(n), .AnyTimes() or .MinTimes()/.MaxTimes()</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="border: 1px solid #dee2e6; padding: 12px;"><strong>Mock interfaces only</strong></td>
+              <td style="border: 1px solid #dee2e6; padding: 12px;">Don't mock structs directly, only interfaces can be mocked</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Additional Documentation -->
+    <div class="guide-section">
+      <h2>📚 Additional Documentation</h2>
+      <ul>
+        <li><a href="https://github.com/golang/mock" target="_blank">GoMock GitHub</a></li>
+        <li><a href="https://blog.golang.org/gomock" target="_blank">Official GoMock Tutorial</a></li>
+        <li><a href="https://pkg.go.dev/testing" target="_blank">Go testing package</a></li>
+      </ul>
+    </div>
+
     <div class="feature-section">
       <h2>Best Practices</h2>
       <ul>
@@ -59,6 +455,8 @@
         <li>Mock external dependencies</li>
         <li>Test edge cases and boundary conditions</li>
         <li>Ensure good test coverage</li>
+        <li>Use GoMock for complex interface testing</li>
+        <li>Write benchmark tests for performance-critical code</li>
       </ul>
     </div>
 
@@ -67,6 +465,7 @@
     </button>
   </div>
 
+  <script src="sidebar-toggle.js"></script>
   <script src="quick-actions.js"></script>
 </body>
 </html>
