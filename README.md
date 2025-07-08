@@ -256,7 +256,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - **Issues**: Report bugs on GitHub Issues
 - **Discussions**: Join our GitHub Discussions
-- **Email**: Contact us at 21106050080@student-uin.suka.ac.id
+- **Email**: Contact us at 21106050080@student.uin-suka.ac.id
 
 ## 🔄 Changelog
 
