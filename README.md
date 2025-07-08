@@ -31,10 +31,9 @@ A powerful Chrome extension that leverages AI to generate comprehensive unit tes
 ### Method 1: Load Unpacked Extension (Development)
 
 1. **Download the Extension**
-   \`\`\`bash
+ 
    git clone https://github.com/Rizald95/golang0-unit-test
-   cd golang0-unit-test
-   \`\`\`
+  
 
 2. **Open Chrome Extensions Page**
    - Navigate to \`chrome://extensions/\`
@@ -144,10 +143,7 @@ golang0-unit-test/
 ### Development Setup
 
 1. **Clone the Repository**
-   \`\`\`bash
    git clone https://github.com/Rizald95/golang0-unit-test
-   cd golang0-unit-test
-   \`\`\`
 
 2. **Install Dependencies**
    No build process required - pure vanilla JavaScript
@@ -260,7 +256,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - **Issues**: Report bugs on GitHub Issues
 - **Discussions**: Join our GitHub Discussions
-- **Email**: Contact us at support@example.com
+- **Email**: Contact us at 21106050080@student-uin.suka.ac.id
 
 ## 🔄 Changelog
 
