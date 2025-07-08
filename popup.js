@@ -1,7 +1,7 @@
 import { initializeFileUpload, detectLanguage } from './fileHandler.js'; 
 
 
-const apiKey = "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"; // API Key Groq
+const apiKey = ""; // API Key Groq
 const apiURL = "https://api.groq.com/openai/v1/chat/completions";
 
 // ✅ Conversation state management
